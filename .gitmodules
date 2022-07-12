@@ -1,3 +1,6 @@
 [submodule "addon\\globalPlugins\\_englishToKanaConverter"]
 	path = addon\\globalPlugins\\_englishToKanaConverter
-	url = git@github.com:actlaboratory/englishToKanaConverter
+	url = git@github.com:actlaboratory/englishToKanaConverter.git
+[submodule "addon\\globalPlugins\\ERE\\_englishToKanaConverter"]
+	path = addon\\globalPlugins\\ERE\\_englishToKanaConverter
+	url = git@github.com:actlaboratory/englishToKanaConverter.git
