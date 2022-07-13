@@ -29,7 +29,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
-		self.autoUpdateChecker.terminate()
 
 	def _setup(self):
 		if hasattr(speech, "speech"):
