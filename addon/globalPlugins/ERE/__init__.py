@@ -1,7 +1,12 @@
 # coding: UTF-8
 
 from __future__ import unicode_literals
-import addonHandler, globalPluginHandler, globalVars, threading, time, wx
+import addonHandler
+import globalPluginHandler
+import globalVars
+import threading
+import time
+import wx
 import speech
 from logHandler import log
 from .constants import *
