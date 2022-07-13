@@ -1,5 +1,11 @@
 # -*- coding: UTF-8 -*-
 
+ADDON_VERSION = "0.0.1"
+ADDON_RELEASE_DATE = "2021-08-10"
+ADDON_NAME = "EnglishReadingEnhancer"
+ADDON_KEYWORD = "ERE"
+
+
 # Build customizations
 # Change this file instead of sconstruct or manifest files, whenever possible.
 
@@ -16,26 +22,26 @@ def _(arg):
 # Add-on information variables
 addon_info = {
 	# add-on Name/identifier, internal for NVDA
-	"addon_name": "englishReadingEnhancer",
+	"addon_name": ADDON_NAME,
 	# Add-on summary, usually the user visible name of the addon.
 	# Translators: Summary for this add-on
 	# to be shown on installation and add-on information found in Add-ons Manager.
-	"addon_summary": _("englishReadingEnhancer"),
+	"addon_summary": _("English Reading Enhancer"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
-	"addon_description": _("NVDA用英語読み上げ強化アドオン"),
+	"addon_description": _("This add-on improves quality of English reading on Japanese speech synthesizers. See add-on's help for details."),
 	# version
-	"addon_version": "0.0.1",
+	"addon_version": ADDON_VERSION,
 	# Author(s)
 	"addon_author": "Kazto Kitabatake - ACT Laboratory <support@actlab.org>",
 	# URL for the add-on documentation support
-	"addon_url": None,
+	"addon_url": "https://actlab.org/software/ERE",
 	# Documentation file name
 	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2018.3.0", minor version is optional)
 	"addon_minimumNVDAVersion": "2019.3",
 	# Last NVDA version supported/tested (e.g. "2018.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2022.1",
+	"addon_lastTestedNVDAVersion": "2022.5",
 	# Add-on update channel (default is None, denoting stable releases,
 	# and for development releases, use "dev".)
 	# Do not change unless you know what you are doing!
@@ -50,19 +56,19 @@ addon_info = {
 # pythonSources = ["addon/globalPlugins/*.py"]
 # For more information on SCons Glob expressions please take a look at:
 # https://scons.org/doc/production/HTML/scons-user/apd.html
-pythonSources = ["addon/globalPlugins/englishReadingEnhancer.py"]
+pythonSources = ["addon/globalPlugins/ERE/*.py"]
 
 # Files that contain strings for translation. Usually your python sources
 i18nSources = pythonSources + ["buildVars.py"]
 
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
-excludedFiles = ["addon/globalPlugins/_englishToKanaConverter/englishToKanaConverter/englishToKanaConverter.log"]
+excludedFiles = ["globalPlugins/ERE/_englishToKanaConverter/englishToKanaConverter/englishToKanaConverter.log"]
 
 # Base language for the NVDA add-on
 # If your add-on is written in a language other than english, modify this variable.
 # For example, set baseLanguage to "es" if your add-on is primarily written in spanish.
-baseLanguage = "ja"
+baseLanguage = "en"
 
 # Markdown extensions for add-on documentation
 # Most add-ons do not require additional Markdown extensions.
