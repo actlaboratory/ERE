@@ -55,7 +55,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 		def processText(locale, text, symbolLevel):
 			text = processText_original(locale, text, symbolLevel)
-			if locale.startswith("ja"):
+			if locale.startswith("ja") and self.getStateSetting():
 				text = c.process(text)
 			return text
 		if hasattr(speech, "speech"):
@@ -65,6 +65,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def _setupMenu(self):
 		self.rootMenu = wx.Menu()
+		self.stateToggleItem = self.rootMenu.Append(wx.ID_ANY, self.stateToggleString(), _("Toggles use of English Reading Enhancer."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleState, self.stateToggleItem)
 		self.updateCheckToggleItem = self.rootMenu.Append(wx.ID_ANY, self.updateCheckToggleString(), _("Toggles update checking on startup."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleUpdateCheck, self.updateCheckToggleItem)
 		self.updateCheckPerformItem = self.rootMenu.Append(wx.ID_ANY, _("Check for updates"), _("Checks for new updates manually."))
@@ -89,4 +91,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def setUpdateCheckSetting(self, val):
 		config.conf["ERE_global"]["checkForUpdatesOnStartup"] = val
+
+	def toggleState(self, evt):
+		changed = not self.getStateSetting()
+		self.setStateSetting(changed)
+		msg = _("English Reading Enhancer has been enabled.") if changed is True else _("English Reading Enhancer has been disabled.")
+		self.stateToggleItem.SetItemLabel(self.stateToggleString())
+		gui.messageBox(msg, _("Settings changed"))
+
+	def getStateSetting(self):
+		return config.conf["ERE_global"]["enable"]
+
+	def setStateSetting(self, val):
+		config.conf["ERE_global"]["enable"] = val
+
+	def stateToggleString(self):
+		return _("Disable English Reading Enhancer") if self.getStateSetting() is True else _("Enable English Reading Enhancer")
 
