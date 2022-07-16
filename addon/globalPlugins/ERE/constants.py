@@ -12,10 +12,6 @@ addonDocFileName = curAddon.manifest["docFileName"]
 homepageURL = "https://actlab.org"
 updateURL = "%s/api/checkUpdate" % homepageURL
 
-# test
-addonName = "HISS"
-addonVersion = "1.1.4"
-
 UPDATER_NEED_UPDATE = 200
 UPDATER_LATEST = 204
 UPDATER_VISIT_SITE = 205
