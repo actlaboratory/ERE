@@ -24,3 +24,7 @@ elif os.path.isfile(os.path.join(addonRootDir, "doc", "en", addonDocFileName)):
 	docFilePath = os.path.join(addonRootDir, "doc", "en", addonDocFileName)
 else:
 	docFilePath = None
+
+# test
+addonName = "HISS"
+addonVersion = "1.0.0"
