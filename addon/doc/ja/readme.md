@@ -96,6 +96,12 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
 * [High-speed Synthesizer For NVDA(HISS)](https://actlab.org/software/hiss)の[読み辞書](https://github.com/actlaboratory/HISS-dictionary)  
   Copyright (c) 2022 AccessibleToolsLaboratory
 
+## 更新履歴
+
+### 2022/XX/XX Version 1.X.X
+
+1. 読み上げ辞書を更新しました。
+
 ## 問い合わせ先
 
 本アドオンを利用しての感想やご要望、不具合のご報告などは、以下のメールアドレスまたは掲示板へご連絡ください。
