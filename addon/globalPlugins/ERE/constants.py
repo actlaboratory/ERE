@@ -1,4 +1,4 @@
-import addonHandler, config, languageHandler, os
+import addonHandler, buildVars, config, languageHandler, os
 
 lang = languageHandler.getLanguage().split("_")[0]
 addonDir = os.path.abspath(os.path.dirname(__file__))
@@ -6,6 +6,7 @@ addonRootDir = os.path.abspath(os.path.join(addonDir, "..", ".."))
 
 curAddon = addonHandler.Addon(addonRootDir)
 addonName = curAddon.manifest["name"]
+addonKeyword = buildVars.ADDON_KEYWORD
 addonSummary = curAddon.manifest["summary"]
 addonVersion = curAddon.manifest["version"]
 addonDocFileName = curAddon.manifest["docFileName"]
