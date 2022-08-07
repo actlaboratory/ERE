@@ -100,7 +100,8 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
 
 ### 2022/XX/XX Version 1.X.X
 
-1. 読み上げ辞書を更新しました。
+1. NVDAの設定で[サポートされている場合自動的に言語を切り替える]が有効な場合に、アドオンの組み込み時に警告メッセージを表示するようにしました。
+2. 読み上げ辞書を更新しました。
 
 ## 問い合わせ先
 
