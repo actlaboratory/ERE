@@ -47,7 +47,7 @@ class build:
 			exit(-1)
 
 		# 前のビルドをクリーンアップ
-		self.creen(package_path)
+		self.clean(package_path)
 
 		# appveyorでのスナップショットの場合はバージョン番号を一時的に書き換え
 		# バージョン番号をセット
@@ -76,7 +76,7 @@ class build:
 			return True
 		return False
 
-	def creen(self,package_path):
+	def clean(self,package_path):
 		if os.path.isdir(package_path):
 			print("Clearling previous build...")
 			shutil.rmtree("output\\")
