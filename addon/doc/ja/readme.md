@@ -1,6 +1,6 @@
-# English Reading Enhancer Ver1.0.0 説明書
+# English Reading Enhancer Ver1.0.1 説明書
 
-(更新:  2022-07-18)
+(更新:  2022-09-23)
 
 [ソフトウェア詳細ページ](https://actlab.org/software/ERE)
 
@@ -98,7 +98,7 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
 
 ## 更新履歴
 
-### 2022/XX/XX Version 1.X.X
+### 2022/09/23 Version 1.0.1
 
 1. NVDAの設定で[サポートされている場合自動的に言語を切り替える]が有効な場合に、アドオンの組み込み時に警告メッセージを表示するようにしました。
 2. 大文字を含む文字列を読み上げる際、特定の場合に不要な空白が空いてしまう問題を修正しました。
