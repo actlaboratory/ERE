@@ -47,7 +47,7 @@ class build:
 			exit(-1)
 
 		# 前のビルドをクリーンアップ
-		self.creen(package_path)
+		self.clean(package_path)
 
 		# appveyorでのスナップショットの場合はバージョン番号を一時的に書き換え
 		# バージョン番号をセット
@@ -76,7 +76,7 @@ class build:
 			return True
 		return False
 
-	def creen(self,package_path):
+	def clean(self,package_path):
 		if os.path.isdir(package_path):
 			print("Clearling previous build...")
 			shutil.rmtree("output\\")
@@ -95,6 +95,7 @@ class build:
 
 	def build(self, package_path, build_filename):
 		print("Building...")
+		shutil.copyfile("addon\\doc\\ja\\readme.md", "public\\readme.md")
 		shutil.copytree("public", package_path)
 		ret = self.runcmd("scons")
 		print("build finished with status %d" % ret)

@@ -38,6 +38,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.autoUpdateChecker.autoUpdateCheck()
 		self._setupMenu()
 		self._setup()
+		t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
+		t.start()
+
+	def _checkAutoLanguageSwitchingState(self):
+		if self.getStateSetting() and config.conf["speech"]["autoLanguageSwitching"]:
+			gui.messageBox(_("Automatic Language switching is enabled. English Reading Enhancer may not work correctly. To use this add-on, we recommend to disable this functionality."), _("Warning"))
 
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
@@ -98,6 +104,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		msg = _("English Reading Enhancer has been enabled.") if changed is True else _("English Reading Enhancer has been disabled.")
 		self.stateToggleItem.SetItemLabel(self.stateToggleString())
 		gui.messageBox(msg, _("Settings changed"))
+		if changed:
+			t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
+			t.start()
 
 	def getStateSetting(self):
 		return config.conf["ERE_global"]["enable"]

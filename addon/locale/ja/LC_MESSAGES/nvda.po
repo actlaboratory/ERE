@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnglishReadingEnhancer 1.0.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2022-07-15 11:59+0900\n"
-"PO-Revision-Date: 2022-07-15 12:08+0900\n"
+"POT-Creation-Date: 2022-09-22 20:08+0900\n"
+"PO-Revision-Date: 2022-09-22 21:33+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -17,60 +17,74 @@ msgstr ""
 #. Translators: Summary for this add-on
 #. to be shown on installation and add-on information found in Add-ons Manager.
 #: addon\globalPlugins\ERE\__init__.py:32
-#: addon\globalPlugins\ERE\__init__.py:74 buildVars.py:29
+#: addon\globalPlugins\ERE\__init__.py:80 buildVars.py:29
 msgid "English Reading Enhancer"
 msgstr "English Reading Enhancer"
 
-#: addon\globalPlugins\ERE\__init__.py:68
+#: addon\globalPlugins\ERE\__init__.py:46
+msgid ""
+"Automatic Language switching is enabled. English Reading Enhancer may not "
+"work correctly. To use this add-on, we recommend to disable this "
+"functionality."
+msgstr ""
+"[サポートされている場合自動的に言語を切り替える]が有効になっているため、"
+"English Reading Enhancerが正しく動作しない可能性があります。NVDAの設定で、こ"
+"の機能を無効にすることをお勧めします。"
+
+#: addon\globalPlugins\ERE\__init__.py:46
+msgid "Warning"
+msgstr "警告"
+
+#: addon\globalPlugins\ERE\__init__.py:74
 msgid "Toggles use of English Reading Enhancer."
 msgstr "English Reading Enhancerを使用するかどうかを切り替えます。"
 
-#: addon\globalPlugins\ERE\__init__.py:70
+#: addon\globalPlugins\ERE\__init__.py:76
 msgid "Toggles update checking on startup."
 msgstr "起動時のアップデートチェックを切り替えます。"
 
-#: addon\globalPlugins\ERE\__init__.py:72
+#: addon\globalPlugins\ERE\__init__.py:78
 msgid "Check for updates"
 msgstr "アップデートを確認"
 
-#: addon\globalPlugins\ERE\__init__.py:72
+#: addon\globalPlugins\ERE\__init__.py:78
 msgid "Checks for new updates manually."
 msgstr "アップデートを手動でチェックします。"
 
-#: addon\globalPlugins\ERE\__init__.py:77
+#: addon\globalPlugins\ERE\__init__.py:83
 msgid "Disable checking for updates on startup"
 msgstr "起動時のアップデートチェックを無効化"
 
-#: addon\globalPlugins\ERE\__init__.py:77
+#: addon\globalPlugins\ERE\__init__.py:83
 msgid "Enable checking for updates on startup"
 msgstr "起動時のアップデートチェックを有効化"
 
-#: addon\globalPlugins\ERE\__init__.py:82
+#: addon\globalPlugins\ERE\__init__.py:88
 msgid "Updates will be checked automatically when launching NVDA."
 msgstr "NVDAを起動するときに、自動的にアップデートがチェックされます。"
 
-#: addon\globalPlugins\ERE\__init__.py:82
+#: addon\globalPlugins\ERE\__init__.py:88
 msgid "Updates will not be checked when launching NVDA."
 msgstr "NVDAを起動するときに、アップデートはチェックされません。"
 
-#: addon\globalPlugins\ERE\__init__.py:84
-#: addon\globalPlugins\ERE\__init__.py:100
+#: addon\globalPlugins\ERE\__init__.py:90
+#: addon\globalPlugins\ERE\__init__.py:106
 msgid "Settings changed"
 msgstr "設定変更完了"
 
-#: addon\globalPlugins\ERE\__init__.py:98
+#: addon\globalPlugins\ERE\__init__.py:104
 msgid "English Reading Enhancer has been enabled."
 msgstr "English Reading Enhancerを有効にしました。"
 
-#: addon\globalPlugins\ERE\__init__.py:98
+#: addon\globalPlugins\ERE\__init__.py:104
 msgid "English Reading Enhancer has been disabled."
 msgstr "English Reading Enhancerを無効にしました。"
 
-#: addon\globalPlugins\ERE\__init__.py:109
+#: addon\globalPlugins\ERE\__init__.py:115
 msgid "Disable English Reading Enhancer"
 msgstr "English Reading Enhancerを無効化"
 
-#: addon\globalPlugins\ERE\__init__.py:109
+#: addon\globalPlugins\ERE\__init__.py:115
 msgid "Enable English Reading Enhancer"
 msgstr "English Reading Enhancerを有効化"
 
