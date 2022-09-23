@@ -104,6 +104,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		msg = _("English Reading Enhancer has been enabled.") if changed is True else _("English Reading Enhancer has been disabled.")
 		self.stateToggleItem.SetItemLabel(self.stateToggleString())
 		gui.messageBox(msg, _("Settings changed"))
+		if changed:
+			t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
+			t.start()
 
 	def getStateSetting(self):
 		return config.conf["ERE_global"]["enable"]
