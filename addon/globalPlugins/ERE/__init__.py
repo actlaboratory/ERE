@@ -37,7 +37,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.autoUpdateChecker = updater.AutoUpdateChecker()
 			self.autoUpdateChecker.autoUpdateCheck()
 		self._setupMenu()
-		self._setup()
+		if self.getStateSetting():
+			self._setup()
 		t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
 		t.start()
 
@@ -54,13 +55,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def _setup(self):
 		if hasattr(speech, "speech"):
-			processText_original = speech.speech.processText
+			self.processText_original = speech.speech.processText
 		else:
-			processText_original = speech.processText
+			self.processText_original = speech.processText
 		c = EnglishToKanaConverter()
 
 		def processText(locale, text, symbolLevel):
-			text = processText_original(locale, text, symbolLevel)
+			text = self.processText_original(locale, text, symbolLevel)
 			if locale.startswith("ja") and self.getStateSetting():
 				text = c.process(text)
 			return text
@@ -68,6 +69,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			speech.speech.processText = processText
 		else:
 			speech.processText = processText
+
+	def _unsetup(self):
+		if hasattr(speech, "speech"):
+			speech.speech.processText = self.processText_original
+		else:
+			speech.processText = self.processText_original
 
 	def _setupMenu(self):
 		self.rootMenu = wx.Menu()
@@ -113,6 +120,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def setStateSetting(self, val):
 		config.conf["ERE_global"]["enable"] = val
+		if val:
+			self._setup()
+		else:
+			self._unsetup()
 
 	def stateToggleString(self):
 		return _("Disable English Reading Enhancer") if self.getStateSetting() is True else _("Enable English Reading Enhancer")
