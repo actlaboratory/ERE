@@ -9,6 +9,8 @@ import threading
 import time
 import wx
 import speech
+import speechDictHandler
+from copy import deepcopy
 from logHandler import log
 from .constants import *
 from . import updater
@@ -69,12 +71,26 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			speech.speech.processText = processText
 		else:
 			speech.processText = processText
+		# modify builtin speech dicts
+		unusedEntries = []
+		unusedPatterns = (
+			"([a-z])([A-Z])",
+			"([A-Z])([A-Z][a-z])",
+		)
+		for entry in speechDictHandler.dictionaries["builtin"]:
+			if entry.pattern in unusedPatterns:
+				unusedEntries.append(entry)
+		self.builtinDict_original = deepcopy(speechDictHandler.dictionaries["builtin"])
+		for entry in unusedEntries:
+			index = speechDictHandler.dictionaries["builtin"].index(entry)
+			del speechDictHandler.dictionaries["builtin"][index]
 
 	def _unsetup(self):
 		if hasattr(speech, "speech"):
 			speech.speech.processText = self.processText_original
 		else:
 			speech.processText = self.processText_original
+		speechDictHandler.dictionaries["builtin"] = self.builtinDict_original
 
 	def _setupMenu(self):
 		self.rootMenu = wx.Menu()
