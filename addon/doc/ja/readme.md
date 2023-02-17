@@ -1,6 +1,6 @@
-# English Reading Enhancer Ver1.0.1 説明書
+# English Reading Enhancer Ver1.0.2 説明書
 
-(更新:  2022-09-23)
+(更新:  2023-02-17)
 
 [ソフトウェア詳細ページ](https://actlab.org/software/ERE)
 
@@ -97,6 +97,12 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
   Copyright (c) 2022 AccessibleToolsLaboratory
 
 ## 更新履歴
+
+### 2023/02/17 Version 1.0.2
+
+1. 大文字を含む文字列を読み上げる際、特定の場合に不要な空白が空いてしまう問題を、更に修正しました。
+2. NVDA 2023.1のアップデートに対応しました。
+3. 読み上げ辞書を更新しました。
 
 ### 2022/09/23 Version 1.0.1
 
