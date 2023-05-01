@@ -1,6 +1,6 @@
-# English Reading Enhancer Ver1.0.2 説明書
+# English Reading Enhancer Ver1.0.3 説明書
 
-(更新:  2023-02-17)
+(更新:  2023-05-03)
 
 [ソフトウェア詳細ページ](https://actlab.org/software/ERE)
 
