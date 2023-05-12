@@ -1,6 +1,6 @@
-# English Reading Enhancer Ver1.0.2 説明書
+# English Reading Enhancer Ver1.0.3 説明書
 
-(更新:  2023-02-17)
+(更新:  2023-05-03)
 
 [ソフトウェア詳細ページ](https://actlab.org/software/ERE)
 
@@ -97,6 +97,11 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
   Copyright (c) 2022 AccessibleToolsLaboratory
 
 ## 更新履歴
+
+### 2023/05/03 Version 1.0.3
+
+1. カナ訳エンジンを更新しました。これにより、すべて小文字で書かれた「chatgpt」などが正しく読み上げられるようになります。
+2. 読み上げ辞書を更新しました。
 
 ### 2023/02/17 Version 1.0.2
 
