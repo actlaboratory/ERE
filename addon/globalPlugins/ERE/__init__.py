@@ -100,6 +100,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleUpdateCheck, self.updateCheckToggleItem)
 		self.updateCheckPerformItem = self.rootMenu.Append(wx.ID_ANY, _("Check for updates"), _("Checks for new updates manually."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.performUpdateCheck, self.updateCheckPerformItem)
+		# github issues
+		self.ghMenu = wx.Menu()
+		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Missreadings"), _("Report words that cannot be read correctly in English Reading Enhancer."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.reportMisreadings, self.reportMisreadingsItem)
+		self.setAccessTokenItem = self.ghMenu.Append(wx.ID_ANY, _("Set GitHub Access Token"), _("Enter your personal GitHub access token."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.setAccessToken, self.setAccessTokenItem)
+		self.openIssuesListItem = self.ghMenu.Append(wx.ID_ANY, _("Open Report List"), _("Open the list of received reports in your browser."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.openIssuesList, self.openIssuesListItem)
+		self.ghMenuItem = self.rootMenu.Append(wx.ID_ANY, _("Report Misreadings"), self.ghMenu)
 		self.rootMenuItem = gui.mainFrame.sysTrayIcon.menu.Insert(2, wx.ID_ANY, _("English Reading Enhancer"), self.rootMenu)
 
 	def updateCheckToggleString(self):
@@ -144,3 +153,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def stateToggleString(self):
 		return _("Disable English Reading Enhancer") if self.getStateSetting() is True else _("Enable English Reading Enhancer")
 
+	# github issues
+	def reportMisreadings(self, evt):
+		pass
+
+	def setAccessToken(self, evt):
+		pass
+
+	def openIssuesList(self, evt):
+		pass
