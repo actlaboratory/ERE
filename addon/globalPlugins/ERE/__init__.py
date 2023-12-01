@@ -26,6 +26,7 @@ except:
 confspec = {
 	"checkForUpdatesOnStartup": "boolean(default=True)",
 	"enable": "boolean(default=True)",
+	"accessToken": 'string(default="")'
 }
 config.conf.spec["ERE_global"] = confspec
 
@@ -158,7 +159,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		pass
 
 	def setAccessToken(self, evt):
-		pass
+		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
+		if d.ShowModal() == wx.ID_CANCEL:
+			return
+		config.conf["ERE_global"]["accessToken"] = d.GetValue().strip()
 
 	def openIssuesList(self, evt):
 		pass
