@@ -156,6 +156,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	# github issues
 	def reportMisreadings(self, evt):
+		from .dialogs import reportMisreadingsDialog
+		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(None)
+		if dialog.ShowModal() == wx.ID_CANCEL:
+			return
+		# retrieve data from dialog
+		eng = dialog.wordEdit.GetValue().strip()
+		oldKana = EnglishToKanaConverter().process(eng)
+		newKana = dialog.pronunciationEdit.GetValue().strip()
+		comment = dialog.commentEdit.GetValue().strip()
+		from .constants import addonVersion
+		self._sendMisreadings(eng, oldKana, newKana, comment, addonVersion)
+
+	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
 		pass
 
 	def setAccessToken(self, evt):
