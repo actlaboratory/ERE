@@ -169,7 +169,36 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self._sendMisreadings(eng, oldKana, newKana, comment, addonVersion)
 
 	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
-		pass
+		# validation
+		z = zip(
+			(_("Word"), _("Pronunciation")),
+			(eng, newKana),
+		)
+		for label, field in z:
+			if not field:
+				gui.messageBox(_("%s is not entered.") % label, _("Error"))
+				return
+		# end validation
+		# issue body(in Japanese)
+		body = f"""#### 単語
+
+		{eng}
+
+#### 現在の読み方
+
+{oldKana}
+
+#### 新しい読み方
+
+{newKana}
+
+#### コメント
+
+{comment}
+
+#### アドオンのバージョン
+
+{addonVersion}"""
 
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])

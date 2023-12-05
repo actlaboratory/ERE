@@ -28,3 +28,7 @@ elif os.path.isfile(os.path.join(addonRootDir, "doc", "en", addonDocFileName)):
 else:
 	docFilePath = None
 
+# for issues
+GH_REPO_OWNER = "actlaboratory"
+GH_REPO_NAME = "ERE"
+GH_ISSUE_TAG = "sent_from_addon"
