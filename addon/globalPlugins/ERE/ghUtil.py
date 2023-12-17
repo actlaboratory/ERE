@@ -47,9 +47,3 @@ class GhUtil:
 		data = data.encode("utf-8")
 		result = self._request(f"/repos/{owner}/{repo}/issues", data, "POST")
 		return result
-
-
-if __name__ == "__main__":
-	obj = GhUtil("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")
-	# result = obj.root()
-	result = obj.createIssue("kitabatake1013", "gh_issue_test", "Test Issue", "Hello.\n\nThis is test.", "sent_from_application")
