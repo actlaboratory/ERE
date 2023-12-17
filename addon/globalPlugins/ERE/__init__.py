@@ -156,6 +156,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	# github issues
 	def reportMisreadings(self, evt):
+		if not config.conf["ERE_global"]["accessToken"]:
+			gui.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
+			return
 		from .dialogs import reportMisreadingsDialog
 		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(None)
 		if dialog.ShowModal() == wx.ID_CANCEL:
@@ -179,10 +182,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				gui.messageBox(_("%s is not entered.") % label, _("Error"))
 				return
 		# end validation
-		# issue body(in Japanese)
+		# issue title/body(in Japanese)
+		title = "読み方変更リクエスト：" + eng
 		body = f"""#### 単語
 
-		{eng}
+{eng}
 
 #### 現在の読み方
 
@@ -199,6 +203,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 #### アドオンのバージョン
 
 {addonVersion}"""
+		# send data
+		from .ghUtil import GhUtil
+		util = GhUtil(config.conf["ERE_global"]["accessToken"])
+		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body, GH_ISSUE_LABEL)
 
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
