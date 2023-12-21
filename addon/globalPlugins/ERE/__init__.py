@@ -207,6 +207,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		from .ghUtil import GhUtil
 		util = GhUtil(config.conf["ERE_global"]["accessToken"])
 		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body, GH_ISSUE_LABEL)
+		if not result:
+			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
 
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])

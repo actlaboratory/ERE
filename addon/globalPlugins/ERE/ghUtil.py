@@ -23,17 +23,7 @@ class GhUtil:
 
 	def _request(self, url, data=None, method=None):
 		r = request.Request(BASE_URL + url, headers=self._getHeader(), data=data, method=method)
-		try:
-			with request.urlopen(r) as response:
-				s = response.read()
-			obj = json.loads(s)
-			return obj
-		except error.HTTPError as e:
-			print(e)
-			return {"error": str(e)}
-
-	def root(self):
-		return self._request("")
+		return request.urlopen(r)
 
 	def createIssue(self, owner, repo, title, body, labels=()):
 		if type(labels) == str:
@@ -45,5 +35,12 @@ class GhUtil:
 		}
 		data = json.dumps(data)
 		data = data.encode("utf-8")
-		result = self._request(f"/repos/{owner}/{repo}/issues", data, "POST")
-		return result
+		try:
+			result = self._request(f"/repos/{owner}/{repo}/issues", data, "POST")
+			print("Response from " + result.url + ": " + str(result.status))
+			print(result.read())
+			return result.status == 201
+		except Exception as e:
+			import traceback
+			print(traceback.format_exc())
+			return False
