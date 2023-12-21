@@ -162,7 +162,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		from .dialogs import reportMisreadingsDialog
 		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(None)
 		if dialog.ShowModal() == wx.ID_CANCEL:
+			dialog.Destroy()
 			return
+		dialog.Destroy()
 		# retrieve data from dialog
 		eng = dialog.wordEdit.GetValue().strip()
 		oldKana = EnglishToKanaConverter().process(eng)
@@ -213,7 +215,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
 		if d.ShowModal() == wx.ID_CANCEL:
+			d.Destroy()
 			return
+		d.Destroy()
 		config.conf["ERE_global"]["accessToken"] = d.GetValue().strip()
 
 	def openIssuesList(self, evt):
