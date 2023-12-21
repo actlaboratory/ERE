@@ -2,6 +2,12 @@
 
 import wx
 
+# 翻訳が当たるようにする
+try:
+	import addonHandler
+	addonHandler.initTranslation()
+except:
+	_ = lambda x : x
 
 class ReportMisreadingsDialog(wx.Dialog):
 	def __init__(self, *args, **kwds):

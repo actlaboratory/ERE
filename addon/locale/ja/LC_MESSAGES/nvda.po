@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnglishReadingEnhancer 1.0.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2023-12-21 17:01+0900\n"
-"PO-Revision-Date: 2023-12-21 17:08+0900\n"
+"POT-Creation-Date: 2023-12-21 17:45+0900\n"
+"PO-Revision-Date: 2023-12-21 17:45+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -60,7 +60,7 @@ msgid "Report words that cannot be read correctly in English Reading Enhancer."
 msgstr "English Reading Enhancerで正しく読めない単語を報告します。"
 
 #: addon\globalPlugins\ERE\__init__.py:108
-#: addon\globalPlugins\ERE\__init__.py:214
+#: addon\globalPlugins\ERE\__init__.py:216
 msgid "Set GitHub Access Token"
 msgstr "GitHub Access Tokenの設定"
 
@@ -77,6 +77,7 @@ msgid "Open the list of received reports in your browser."
 msgstr "受信した報告の一覧をブラウザーで開きます。"
 
 #: addon\globalPlugins\ERE\__init__.py:112
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:15
 msgid "Report Misreadings"
 msgstr "読み間違いの報告"
 
@@ -122,31 +123,33 @@ msgid "Before using this feature, please set your GitHub Access Token."
 msgstr "この機能を使用する前に、GitHub アクセス トークンを設定してください。"
 
 #: addon\globalPlugins\ERE\__init__.py:160
-#: addon\globalPlugins\ERE\__init__.py:182
-#: addon\globalPlugins\ERE\__init__.py:211
+#: addon\globalPlugins\ERE\__init__.py:184
+#: addon\globalPlugins\ERE\__init__.py:213
 #: addon\globalPlugins\ERE\updater.py:78 addon\globalPlugins\ERE\updater.py:83
 #: addon\globalPlugins\ERE\updater.py:94
 msgid "Error"
 msgstr "エラー"
 
-#: addon\globalPlugins\ERE\__init__.py:177
+#: addon\globalPlugins\ERE\__init__.py:179
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:22
 msgid "Word"
 msgstr "単語"
 
-#: addon\globalPlugins\ERE\__init__.py:177
+#: addon\globalPlugins\ERE\__init__.py:179
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:28
 msgid "Pronunciation"
 msgstr "読み方"
 
-#: addon\globalPlugins\ERE\__init__.py:182
+#: addon\globalPlugins\ERE\__init__.py:184
 #, python-format
 msgid "%s is not entered."
 msgstr "%sが入力されていません。"
 
-#: addon\globalPlugins\ERE\__init__.py:211
+#: addon\globalPlugins\ERE\__init__.py:213
 msgid "Failed to send a report."
 msgstr "報告を送信できませんでした。"
 
-#: addon\globalPlugins\ERE\__init__.py:214
+#: addon\globalPlugins\ERE\__init__.py:216
 msgid "GitHub Access Token"
 msgstr "GitHub アクセス トークン"
 
@@ -243,6 +246,10 @@ msgstr "アドオンがアップデートされるまでお待ちください。
 #, python-format
 msgid "Failed to update add-on  from %s."
 msgstr "%sからのアップデートに失敗しました。"
+
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:34
+msgid "Comment"
+msgstr "コメント"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
