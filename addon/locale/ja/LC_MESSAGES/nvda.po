@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnglishReadingEnhancer 1.0.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2022-09-22 20:08+0900\n"
-"PO-Revision-Date: 2022-09-22 21:33+0900\n"
+"POT-Creation-Date: 2023-12-21 17:01+0900\n"
+"PO-Revision-Date: 2023-12-21 17:08+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -11,17 +11,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
 #. to be shown on installation and add-on information found in Add-ons Manager.
-#: addon\globalPlugins\ERE\__init__.py:32
-#: addon\globalPlugins\ERE\__init__.py:80 buildVars.py:29
+#: addon\globalPlugins\ERE\__init__.py:35
+#: addon\globalPlugins\ERE\__init__.py:113 buildVars.py:29
 msgid "English Reading Enhancer"
 msgstr "English Reading Enhancer"
 
-#: addon\globalPlugins\ERE\__init__.py:46
+#: addon\globalPlugins\ERE\__init__.py:50
 msgid ""
 "Automatic Language switching is enabled. English Reading Enhancer may not "
 "work correctly. To use this add-on, we recommend to disable this "
@@ -31,62 +31,124 @@ msgstr ""
 "English Reading Enhancerが正しく動作しない可能性があります。NVDAの設定で、こ"
 "の機能を無効にすることをお勧めします。"
 
-#: addon\globalPlugins\ERE\__init__.py:46
+#: addon\globalPlugins\ERE\__init__.py:50
 msgid "Warning"
 msgstr "警告"
 
-#: addon\globalPlugins\ERE\__init__.py:74
+#: addon\globalPlugins\ERE\__init__.py:98
 msgid "Toggles use of English Reading Enhancer."
 msgstr "English Reading Enhancerを使用するかどうかを切り替えます。"
 
-#: addon\globalPlugins\ERE\__init__.py:76
+#: addon\globalPlugins\ERE\__init__.py:100
 msgid "Toggles update checking on startup."
 msgstr "起動時のアップデートチェックを切り替えます。"
 
-#: addon\globalPlugins\ERE\__init__.py:78
+#: addon\globalPlugins\ERE\__init__.py:102
 msgid "Check for updates"
 msgstr "アップデートを確認"
 
-#: addon\globalPlugins\ERE\__init__.py:78
+#: addon\globalPlugins\ERE\__init__.py:102
 msgid "Checks for new updates manually."
 msgstr "アップデートを手動でチェックします。"
 
-#: addon\globalPlugins\ERE\__init__.py:83
+#: addon\globalPlugins\ERE\__init__.py:106
+msgid "Report Missreadings"
+msgstr "読み間違いの報告"
+
+#: addon\globalPlugins\ERE\__init__.py:106
+msgid "Report words that cannot be read correctly in English Reading Enhancer."
+msgstr "English Reading Enhancerで正しく読めない単語を報告します。"
+
+#: addon\globalPlugins\ERE\__init__.py:108
+#: addon\globalPlugins\ERE\__init__.py:214
+msgid "Set GitHub Access Token"
+msgstr "GitHub Access Tokenの設定"
+
+#: addon\globalPlugins\ERE\__init__.py:108
+msgid "Enter your personal GitHub access token."
+msgstr "個人用GitHub アクセス トークンを入力します。"
+
+#: addon\globalPlugins\ERE\__init__.py:110
+msgid "Open Report List"
+msgstr "報告一覧を開く"
+
+#: addon\globalPlugins\ERE\__init__.py:110
+msgid "Open the list of received reports in your browser."
+msgstr "受信した報告の一覧をブラウザーで開きます。"
+
+#: addon\globalPlugins\ERE\__init__.py:112
+msgid "Report Misreadings"
+msgstr "読み間違いの報告"
+
+#: addon\globalPlugins\ERE\__init__.py:116
 msgid "Disable checking for updates on startup"
 msgstr "起動時のアップデートチェックを無効化"
 
-#: addon\globalPlugins\ERE\__init__.py:83
+#: addon\globalPlugins\ERE\__init__.py:116
 msgid "Enable checking for updates on startup"
 msgstr "起動時のアップデートチェックを有効化"
 
-#: addon\globalPlugins\ERE\__init__.py:88
+#: addon\globalPlugins\ERE\__init__.py:121
 msgid "Updates will be checked automatically when launching NVDA."
 msgstr "NVDAを起動するときに、自動的にアップデートがチェックされます。"
 
-#: addon\globalPlugins\ERE\__init__.py:88
+#: addon\globalPlugins\ERE\__init__.py:121
 msgid "Updates will not be checked when launching NVDA."
 msgstr "NVDAを起動するときに、アップデートはチェックされません。"
 
-#: addon\globalPlugins\ERE\__init__.py:90
-#: addon\globalPlugins\ERE\__init__.py:106
+#: addon\globalPlugins\ERE\__init__.py:123
+#: addon\globalPlugins\ERE\__init__.py:139
 msgid "Settings changed"
 msgstr "設定変更完了"
 
-#: addon\globalPlugins\ERE\__init__.py:104
+#: addon\globalPlugins\ERE\__init__.py:137
 msgid "English Reading Enhancer has been enabled."
 msgstr "English Reading Enhancerを有効にしました。"
 
-#: addon\globalPlugins\ERE\__init__.py:104
+#: addon\globalPlugins\ERE\__init__.py:137
 msgid "English Reading Enhancer has been disabled."
 msgstr "English Reading Enhancerを無効にしました。"
 
-#: addon\globalPlugins\ERE\__init__.py:115
+#: addon\globalPlugins\ERE\__init__.py:155
 msgid "Disable English Reading Enhancer"
 msgstr "English Reading Enhancerを無効化"
 
-#: addon\globalPlugins\ERE\__init__.py:115
+#: addon\globalPlugins\ERE\__init__.py:155
 msgid "Enable English Reading Enhancer"
 msgstr "English Reading Enhancerを有効化"
+
+#: addon\globalPlugins\ERE\__init__.py:160
+msgid "Before using this feature, please set your GitHub Access Token."
+msgstr "この機能を使用する前に、GitHub アクセス トークンを設定してください。"
+
+#: addon\globalPlugins\ERE\__init__.py:160
+#: addon\globalPlugins\ERE\__init__.py:182
+#: addon\globalPlugins\ERE\__init__.py:211
+#: addon\globalPlugins\ERE\updater.py:78 addon\globalPlugins\ERE\updater.py:83
+#: addon\globalPlugins\ERE\updater.py:94
+msgid "Error"
+msgstr "エラー"
+
+#: addon\globalPlugins\ERE\__init__.py:177
+msgid "Word"
+msgstr "単語"
+
+#: addon\globalPlugins\ERE\__init__.py:177
+msgid "Pronunciation"
+msgstr "読み方"
+
+#: addon\globalPlugins\ERE\__init__.py:182
+#, python-format
+msgid "%s is not entered."
+msgstr "%sが入力されていません。"
+
+#: addon\globalPlugins\ERE\__init__.py:211
+msgid "Failed to send a report."
+msgstr "報告を送信できませんでした。"
+
+#: addon\globalPlugins\ERE\__init__.py:214
+msgid "GitHub Access Token"
+msgstr "GitHub アクセス トークン"
 
 #: addon\globalPlugins\ERE\updater.py:77
 msgid ""
@@ -95,11 +157,6 @@ msgid ""
 msgstr ""
 "アップデートサーバに接続できません。\n"
 "インターネット接続をご確認ください。"
-
-#: addon\globalPlugins\ERE\updater.py:78 addon\globalPlugins\ERE\updater.py:83
-#: addon\globalPlugins\ERE\updater.py:94
-msgid "Error"
-msgstr "エラー"
 
 #: addon\globalPlugins\ERE\updater.py:83
 msgid "Unable to connect to update server."
