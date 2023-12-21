@@ -103,9 +103,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.performUpdateCheck, self.updateCheckPerformItem)
 		# github issues
 		self.ghMenu = wx.Menu()
-		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Missreadings"), _("Report words that cannot be read correctly in English Reading Enhancer."))
+		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Missreadings") + "...", _("Report words that cannot be read correctly in English Reading Enhancer."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.reportMisreadings, self.reportMisreadingsItem)
-		self.setAccessTokenItem = self.ghMenu.Append(wx.ID_ANY, _("Set GitHub Access Token"), _("Enter your personal GitHub access token."))
+		self.setAccessTokenItem = self.ghMenu.Append(wx.ID_ANY, _("Set GitHub Access Token") + "...", _("Enter your personal GitHub access token."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.setAccessToken, self.setAccessTokenItem)
 		self.openIssuesListItem = self.ghMenu.Append(wx.ID_ANY, _("Open Report List"), _("Open the list of received reports in your browser."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.openIssuesList, self.openIssuesListItem)
