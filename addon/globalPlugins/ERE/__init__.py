@@ -217,4 +217,4 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		config.conf["ERE_global"]["accessToken"] = d.GetValue().strip()
 
 	def openIssuesList(self, evt):
-		pass
+		os.startfile("https://github.com/%(owner)s/%(repo)s/labels/%(label)s" % {"owner": GH_REPO_OWNER, "repo": GH_REPO_NAME, "label": GH_ISSUE_LABEL})
