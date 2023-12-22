@@ -171,10 +171,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		oldKana = EnglishToKanaConverter().process(eng)
 		newKana = dialog.pronunciationEdit.GetValue().strip()
 		comment = dialog.commentEdit.GetValue().strip()
-		from .constants import addonVersion
-		self._sendMisreadings(eng, oldKana, newKana, comment, addonVersion)
-
-	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
 		# validation
 		z = zip(
 			(_("Word"), _("Pronunciation")),
@@ -182,9 +178,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 		for label, field in z:
 			if not field:
-				gui.messageBox(_("%s is not entered.") % label, _("Error"))
+				gui.messageBox(_("%s is not entered.") % label, _("Error"), wx.ICON_ERROR)
 				return
 		# end validation
+		from .constants import addonVersion
+		self._sendMisreadings(eng, oldKana, newKana, comment, addonVersion)
+
+	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
 		# issue title/body(in Japanese)
 		title = "読み方変更リクエスト：" + eng
 		body = f"""#### 単語

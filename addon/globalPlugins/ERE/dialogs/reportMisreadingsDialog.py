@@ -42,6 +42,7 @@ class ReportMisreadingsDialog(wx.Dialog):
 
 		self.okButton = wx.Button(self, wx.ID_OK, "")
 		self.okButton.SetDefault()
+		self.okButton.Bind(wx.EVT_BUTTON, self.okButtonPressedEvent)
 		buttonsSizer.AddButton(self.okButton)
 
 		self.cancelButton = wx.Button(self, wx.ID_CANCEL, "")
@@ -56,3 +57,17 @@ class ReportMisreadingsDialog(wx.Dialog):
 		self.SetEscapeId(self.cancelButton.GetId())
 
 		self.Layout()
+
+	def okButtonPressedEvent(self, event: wx.CommandEvent):
+		# validation
+		z = zip(
+			(_("Word"), _("Pronunciation")),
+			(self.wordEdit.GetValue().strip(), self.pronunciationEdit.GetValue().strip()),
+		)
+		for label, field in z:
+			if not field:
+				import gui
+				gui.messageBox(_("%s is not entered.") % label, _("Error"), wx.ICON_ERROR, self)
+				return
+		# end validation
+		event.Skip()
