@@ -157,15 +157,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	# github issues
 	def reportMisreadings(self, evt):
+		# 多重起動防止
+		if gui.message.isModalMessageBoxActive():
+			return
 		if not config.conf["ERE_global"]["accessToken"]:
 			gui.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
 			return
 		from .dialogs import reportMisreadingsDialog
-		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(None)
-		if dialog.ShowModal() == wx.ID_CANCEL:
-			dialog.Destroy()
-			return
+		gui.mainFrame.prePopup()
+		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(gui.mainFrame)
+		res = gui.message.displayDialogAsModal(dialog)
 		dialog.Destroy()
+		gui.mainFrame.postPopup()
+		if res == wx.ID_CANCEL:
+			return
 		# retrieve data from dialog
 		eng = dialog.wordEdit.GetValue().strip()
 		oldKana = EnglishToKanaConverter().process(eng)
@@ -216,7 +221,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	# define script
 	@script(description=_("Report Misreadings"), gesture="kb:nvda+control+shift+e")
 	def script_reportMisreadings(self, gesture):
-		self.reportMisreadings()
+		wx.CallAfter(self.reportMisreadings, None)
 
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
