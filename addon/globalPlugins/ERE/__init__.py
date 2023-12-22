@@ -15,6 +15,7 @@ from logHandler import log
 from .constants import *
 from . import updater
 from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
+from scriptHandler import script
 
 try:
 	import addonHandler
@@ -103,7 +104,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.performUpdateCheck, self.updateCheckPerformItem)
 		# github issues
 		self.ghMenu = wx.Menu()
-		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Missreadings") + "...", _("Report words that cannot be read correctly in English Reading Enhancer."))
+		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Misreadings") + "...", _("Report words that cannot be read correctly in English Reading Enhancer."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.reportMisreadings, self.reportMisreadingsItem)
 		self.setAccessTokenItem = self.ghMenu.Append(wx.ID_ANY, _("Set GitHub Access Token") + "...", _("Enter your personal GitHub access token."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.setAccessToken, self.setAccessTokenItem)
@@ -211,6 +212,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body, GH_ISSUE_LABEL)
 		if not result:
 			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
+
+	# define script
+	@script(description=_("Report Misreadings"), gesture="kb:nvda+control+shift+e")
+	def script_reportMisreadings(self, gesture):
+		self.reportMisreadings()
 
 	def setAccessToken(self, evt):
 		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
