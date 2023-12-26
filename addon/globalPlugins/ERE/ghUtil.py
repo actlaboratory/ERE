@@ -44,3 +44,14 @@ class GhUtil:
 			import traceback
 			print(traceback.format_exc())
 			return False
+
+	def isActive(self):
+		try:
+			result = self._request("/user")
+			print("Response from " + result.url + ": " + str(result.status))
+			print(result.read())
+			return result.status == 200
+		except Exception as e:
+			import traceback
+			print(traceback.format_exc())
+			return False

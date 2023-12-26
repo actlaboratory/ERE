@@ -226,14 +226,30 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def setAccessToken(self, evt):
 		if gui.message.isModalMessageBoxActive():
 			return
-		gui.mainFrame.prePopup()
-		d = wx.TextEntryDialog(gui.mainFrame, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
-		res = gui.message.displayDialogAsModal(d)
-		d.Destroy()
-		gui.mainFrame.postPopup()
-		if res == wx.ID_CANCEL:
-			return
-		config.conf["ERE_global"]["accessToken"] = d.GetValue().strip()
+		token = config.conf["ERE_global"]["accessToken"]
+		# 正常な値が入力されるまで「ダイアログの表示→有効性確認」を続ける
+		while True:
+			gui.mainFrame.prePopup()
+			d = wx.TextEntryDialog(gui.mainFrame, _("GitHub Access Token"), _("Set GitHub Access Token"), token)
+			res = gui.message.displayDialogAsModal(d)
+			d.Destroy()
+			gui.mainFrame.postPopup()
+			if res == wx.ID_CANCEL:
+				# 何もせずにループも関数も抜ける
+				return
+			token = d.GetValue().strip()
+			# 入力内容が空ならば、「設定値を削除した」と見なす
+			if not token:
+				break
+			# 動作確認
+			from .ghUtil import GhUtil
+			util = GhUtil(token)
+			if not util.isActive():
+				# 認証されていない
+				gui.messageBox(_("GitHub Access Token is invalid."), _("Error"), wx.ICON_ERROR)
+				continue
+			break
+		config.conf["ERE_global"]["accessToken"] = token
 
 	def openIssuesList(self, evt):
 		os.startfile("https://github.com/%(owner)s/%(repo)s/labels/%(label)s" % {"owner": GH_REPO_OWNER, "repo": GH_REPO_NAME, "label": GH_ISSUE_LABEL})
