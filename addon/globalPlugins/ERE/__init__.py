@@ -224,11 +224,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		wx.CallAfter(self.reportMisreadings, None)
 
 	def setAccessToken(self, evt):
-		d = wx.TextEntryDialog(None, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
-		if d.ShowModal() == wx.ID_CANCEL:
-			d.Destroy()
+		if gui.message.isModalMessageBoxActive():
 			return
+		gui.mainFrame.prePopup()
+		d = wx.TextEntryDialog(gui.mainFrame, _("GitHub Access Token"), _("Set GitHub Access Token"), config.conf["ERE_global"]["accessToken"])
+		res = gui.message.displayDialogAsModal(d)
 		d.Destroy()
+		gui.mainFrame.postPopup()
+		if res == wx.ID_CANCEL:
+			return
 		config.conf["ERE_global"]["accessToken"] = d.GetValue().strip()
 
 	def openIssuesList(self, evt):
