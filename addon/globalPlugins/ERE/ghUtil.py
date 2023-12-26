@@ -4,6 +4,8 @@ import json
 from urllib import request
 from urllib import parse
 from urllib import error
+# NVDAのログ出力用
+from logHandler import log
 
 BASE_URL = "https://api.github.com"
 
@@ -37,21 +39,21 @@ class GhUtil:
 		data = data.encode("utf-8")
 		try:
 			result = self._request(f"/repos/{owner}/{repo}/issues", data, "POST")
-			print("Response from " + result.url + ": " + str(result.status))
-			print(result.read())
+			log.debug("Response from " + result.url + ": " + str(result.status))
+			log.debug(result.read())
 			return result.status == 201
 		except Exception as e:
 			import traceback
-			print(traceback.format_exc())
+			log.error(traceback.format_exc())
 			return False
 
 	def isActive(self):
 		try:
 			result = self._request("/user")
-			print("Response from " + result.url + ": " + str(result.status))
-			print(result.read())
+			log.debug("Response from " + result.url + ": " + str(result.status))
+			log.debug(result.read())
 			return result.status == 200
 		except Exception as e:
 			import traceback
-			print(traceback.format_exc())
+			log.error(traceback.format_exc())
 			return False
