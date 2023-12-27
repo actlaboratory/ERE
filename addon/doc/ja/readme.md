@@ -100,6 +100,7 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
 
 ### 2023/12/31 Version 1.X.X
 
+1. NVDA 2024.1のアップデートに対応しました。
 1. カナ訳エンジンを更新しました。これにより、ローマ字の途中の「`no`」が「ノー」と読み上げられる場合があった問題などが改善します。
 1. 読み上げ辞書を更新しました。
 
