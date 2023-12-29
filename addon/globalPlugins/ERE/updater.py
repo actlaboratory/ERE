@@ -214,8 +214,6 @@ class UpdateDownloader(updateCheck.UpdateDownloader):
 
     def _downloadSuccess(self):
         self._stopped()
-        from gui import addonGui
-        closeAfter = addonGui.AddonsDialog._instance is None or (versionInfo.version_year, versionInfo.version_major) >= (2019, 1)
         try:
             try:
                 bundle = addonHandler.AddonBundle(self.destPath.decode("mbcs"))
@@ -239,8 +237,6 @@ class UpdateDownloader(updateCheck.UpdateDownloader):
                 gui.ExecAndPump(addonHandler.installAddonBundle, bundle)
             except BaseException:
                 log.error("Error installing  addon bundle from %s" % self.destPath, exc_info=True)
-                if not closeAfter:
-                    addonGui.AddonsDialog(gui.mainFrame).refreshAddonsList()
                 progressDialog.done()
                 del progressDialog
                 gui.messageBox(_("Failed to update add-on  from %s.") % self.destPath,
@@ -248,14 +244,10 @@ class UpdateDownloader(updateCheck.UpdateDownloader):
                                wx.OK | wx.ICON_ERROR)
                 return
             else:
-                if not closeAfter:
-                    addonGui.AddonsDialog(gui.mainFrame).refreshAddonsList(activeIndex=-1)
                 progressDialog.done()
                 del progressDialog
         finally:
             self.cleanup_tempfile()
-            if closeAfter:
-                wx.CallLater(1, addonGui.AddonsDialog(gui.mainFrame).Close)
 
     def cleanup_tempfile(self):
         if not os.path.isfile(self.destPath):
