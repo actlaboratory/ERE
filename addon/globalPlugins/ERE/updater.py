@@ -248,6 +248,8 @@ class UpdateDownloader(updateCheck.UpdateDownloader):
                 del progressDialog
         finally:
             self.cleanup_tempfile()
+            from gui import addonGui
+            addonGui.promptUserForRestart()
 
     def cleanup_tempfile(self):
         if not os.path.isfile(self.destPath):
