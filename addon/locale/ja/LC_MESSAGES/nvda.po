@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnglishReadingEnhancer 1.0.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2023-12-26 14:26+0900\n"
-"PO-Revision-Date: 2023-12-26 14:28+0900\n"
+"POT-Creation-Date: 2023-12-30 16:09+0900\n"
+"PO-Revision-Date: 2023-12-30 16:10+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -54,7 +54,7 @@ msgstr "アップデートを手動でチェックします。"
 #. define script
 #: addon\globalPlugins\ERE\__init__.py:107
 #: addon\globalPlugins\ERE\__init__.py:113
-#: addon\globalPlugins\ERE\__init__.py:222
+#: addon\globalPlugins\ERE\__init__.py:223
 #: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:15
 msgid "Report Misreadings"
 msgstr "読み間違いの報告"
@@ -64,7 +64,7 @@ msgid "Report words that cannot be read correctly in English Reading Enhancer."
 msgstr "English Reading Enhancerで正しく読めない単語を報告します。"
 
 #: addon\globalPlugins\ERE\__init__.py:109
-#: addon\globalPlugins\ERE\__init__.py:233
+#: addon\globalPlugins\ERE\__init__.py:234
 msgid "Set GitHub Access Token"
 msgstr "GitHub アクセス トークンの設定"
 
@@ -124,7 +124,7 @@ msgstr "この機能を使用する前に、GitHub アクセス トークンを�
 #: addon\globalPlugins\ERE\__init__.py:164
 #: addon\globalPlugins\ERE\__init__.py:186
 #: addon\globalPlugins\ERE\__init__.py:219
-#: addon\globalPlugins\ERE\__init__.py:249
+#: addon\globalPlugins\ERE\__init__.py:250
 #: addon\globalPlugins\ERE\updater.py:78 addon\globalPlugins\ERE\updater.py:83
 #: addon\globalPlugins\ERE\updater.py:94
 #: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:70
@@ -153,12 +153,20 @@ msgstr "%sが入力されていません。"
 msgid "Failed to send a report."
 msgstr "報告を送信できませんでした。"
 
-#: addon\globalPlugins\ERE\__init__.py:233
+#: addon\globalPlugins\ERE\__init__.py:220
+msgid "Report sent."
+msgstr "報告を送信しました。"
+
+#: addon\globalPlugins\ERE\__init__.py:220
+msgid "Success"
+msgstr "完了"
+
+#: addon\globalPlugins\ERE\__init__.py:234
 msgid "GitHub Access Token"
 msgstr "GitHub アクセス トークン"
 
 #. 認証されていない
-#: addon\globalPlugins\ERE\__init__.py:249
+#: addon\globalPlugins\ERE\__init__.py:250
 msgid "GitHub Access Token is invalid."
 msgstr "GitHub アクセス トークンが間違っています。"
 
