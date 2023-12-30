@@ -191,7 +191,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
 		# issue title/body(in Japanese)
-		title = "読み方変更リクエスト：" + eng
+		title = GH_ISSUE_PREFIX + eng
 		body = f"""#### 単語
 
 {eng}
@@ -214,7 +214,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# send data
 		from .ghUtil import GhUtil
 		util = GhUtil(config.conf["ERE_global"]["accessToken"])
-		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body, GH_ISSUE_LABEL)
+		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body)
 		if not result:
 			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
 		gui.messageBox(_("Report sent."), _("Success"))
@@ -253,4 +253,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		config.conf["ERE_global"]["accessToken"] = token
 
 	def openIssuesList(self, evt):
-		os.startfile("https://github.com/%(owner)s/%(repo)s/labels/%(label)s" % {"owner": GH_REPO_OWNER, "repo": GH_REPO_NAME, "label": GH_ISSUE_LABEL})
+		from urllib.parse import quote
+		url = f"https://github.com/{GH_REPO_OWNER}/{GH_REPO_NAME}/issues?q=is%3Aissue+" + quote(GH_ISSUE_PREFIX)
+		os.startfile(url)
