@@ -25,7 +25,11 @@ class GhUtil:
 
 	def _request(self, url, data=None, method=None):
 		r = request.Request(BASE_URL + url, headers=self._getHeader(), data=data, method=method)
-		return request.urlopen(r)
+		try:
+			return request.urlopen(r)
+		except error.HTTPError as e:
+			# urllib.error.HTTPErrorはHTTPレスポンスと同じように扱えるので、戻り値としておく
+			return e
 
 	def createIssue(self, owner, repo, title, body, labels=()):
 		if type(labels) == str:
