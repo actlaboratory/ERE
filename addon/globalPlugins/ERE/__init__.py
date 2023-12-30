@@ -217,6 +217,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body)
 		if not result:
 			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
+			return
 		gui.messageBox(_("Report sent."), _("Success"))
 
 	# define script

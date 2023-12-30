@@ -33,4 +33,4 @@ else:
 # GH_REPO_NAME = "ERE"
 GH_REPO_OWNER = "kitabatake1013"
 GH_REPO_NAME = "gh_issue_test"
-GH_ISSUE_LABEL = "sent_from_addon"
+GH_ISSUE_PREFIX = "読み方変更リクエスト："
