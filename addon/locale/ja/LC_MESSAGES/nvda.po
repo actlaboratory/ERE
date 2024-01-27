@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EnglishReadingEnhancer 1.0.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
-"POT-Creation-Date: 2023-12-22 11:29+0900\n"
-"PO-Revision-Date: 2023-12-22 15:21+0900\n"
+"POT-Creation-Date: 2023-12-30 16:09+0900\n"
+"PO-Revision-Date: 2023-12-30 16:10+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
@@ -54,7 +54,7 @@ msgstr "アップデートを手動でチェックします。"
 #. define script
 #: addon\globalPlugins\ERE\__init__.py:107
 #: addon\globalPlugins\ERE\__init__.py:113
-#: addon\globalPlugins\ERE\__init__.py:217
+#: addon\globalPlugins\ERE\__init__.py:223
 #: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:15
 msgid "Report Misreadings"
 msgstr "読み間違いの報告"
@@ -64,7 +64,7 @@ msgid "Report words that cannot be read correctly in English Reading Enhancer."
 msgstr "English Reading Enhancerで正しく読めない単語を報告します。"
 
 #: addon\globalPlugins\ERE\__init__.py:109
-#: addon\globalPlugins\ERE\__init__.py:222
+#: addon\globalPlugins\ERE\__init__.py:234
 msgid "Set GitHub Access Token"
 msgstr "GitHub アクセス トークンの設定"
 
@@ -117,40 +117,58 @@ msgstr "English Reading Enhancerを無効化"
 msgid "Enable English Reading Enhancer"
 msgstr "English Reading Enhancerを有効化"
 
-#: addon\globalPlugins\ERE\__init__.py:161
+#: addon\globalPlugins\ERE\__init__.py:164
 msgid "Before using this feature, please set your GitHub Access Token."
 msgstr "この機能を使用する前に、GitHub アクセス トークンを設定してください。"
 
-#: addon\globalPlugins\ERE\__init__.py:161
-#: addon\globalPlugins\ERE\__init__.py:185
-#: addon\globalPlugins\ERE\__init__.py:214
+#: addon\globalPlugins\ERE\__init__.py:164
+#: addon\globalPlugins\ERE\__init__.py:186
+#: addon\globalPlugins\ERE\__init__.py:219
+#: addon\globalPlugins\ERE\__init__.py:250
 #: addon\globalPlugins\ERE\updater.py:78 addon\globalPlugins\ERE\updater.py:83
 #: addon\globalPlugins\ERE\updater.py:94
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:70
 msgid "Error"
 msgstr "エラー"
 
-#: addon\globalPlugins\ERE\__init__.py:180
+#: addon\globalPlugins\ERE\__init__.py:181
 #: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:22
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:64
 msgid "Word"
 msgstr "単語"
 
-#: addon\globalPlugins\ERE\__init__.py:180
+#: addon\globalPlugins\ERE\__init__.py:181
 #: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:28
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:64
 msgid "Pronunciation"
 msgstr "読み方"
 
-#: addon\globalPlugins\ERE\__init__.py:185
+#: addon\globalPlugins\ERE\__init__.py:186
+#: addon\globalPlugins\ERE\dialogs\reportMisreadingsDialog.py:70
 #, python-format
 msgid "%s is not entered."
 msgstr "%sが入力されていません。"
 
-#: addon\globalPlugins\ERE\__init__.py:214
+#: addon\globalPlugins\ERE\__init__.py:219
 msgid "Failed to send a report."
 msgstr "報告を送信できませんでした。"
 
-#: addon\globalPlugins\ERE\__init__.py:222
+#: addon\globalPlugins\ERE\__init__.py:220
+msgid "Report sent."
+msgstr "報告を送信しました。"
+
+#: addon\globalPlugins\ERE\__init__.py:220
+msgid "Success"
+msgstr "完了"
+
+#: addon\globalPlugins\ERE\__init__.py:234
 msgid "GitHub Access Token"
 msgstr "GitHub アクセス トークン"
+
+#. 認証されていない
+#: addon\globalPlugins\ERE\__init__.py:250
+msgid "GitHub Access Token is invalid."
+msgstr "GitHub アクセス トークンが間違っています。"
 
 #: addon\globalPlugins\ERE\updater.py:77
 msgid ""
