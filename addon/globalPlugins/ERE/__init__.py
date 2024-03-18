@@ -15,6 +15,7 @@ from logHandler import log
 from .constants import *
 from . import updater
 from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
+from scriptHandler import script
 
 try:
 	import addonHandler
@@ -26,6 +27,7 @@ except:
 confspec = {
 	"checkForUpdatesOnStartup": "boolean(default=True)",
 	"enable": "boolean(default=True)",
+	"accessToken": 'string(default="")'
 }
 config.conf.spec["ERE_global"] = confspec
 
@@ -100,6 +102,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleUpdateCheck, self.updateCheckToggleItem)
 		self.updateCheckPerformItem = self.rootMenu.Append(wx.ID_ANY, _("Check for updates"), _("Checks for new updates manually."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.performUpdateCheck, self.updateCheckPerformItem)
+		# github issues
+		self.ghMenu = wx.Menu()
+		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Misreadings") + "...", _("Report words that cannot be read correctly in English Reading Enhancer."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.reportMisreadings, self.reportMisreadingsItem)
+		self.setAccessTokenItem = self.ghMenu.Append(wx.ID_ANY, _("Set GitHub Access Token") + "...", _("Enter your personal GitHub access token."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.setAccessToken, self.setAccessTokenItem)
+		self.openIssuesListItem = self.ghMenu.Append(wx.ID_ANY, _("Open Report List"), _("Open the list of received reports in your browser."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.openIssuesList, self.openIssuesListItem)
+		self.ghMenuItem = self.rootMenu.Append(wx.ID_ANY, _("Report Misreadings"), self.ghMenu)
 		self.rootMenuItem = gui.mainFrame.sysTrayIcon.menu.Insert(2, wx.ID_ANY, _("English Reading Enhancer"), self.rootMenu)
 
 	def updateCheckToggleString(self):
@@ -144,3 +155,105 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def stateToggleString(self):
 		return _("Disable English Reading Enhancer") if self.getStateSetting() is True else _("Enable English Reading Enhancer")
 
+	# github issues
+	def reportMisreadings(self, evt):
+		# 多重起動防止
+		if gui.message.isModalMessageBoxActive():
+			return
+		if not config.conf["ERE_global"]["accessToken"]:
+			gui.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
+			return
+		from .dialogs import reportMisreadingsDialog
+		gui.mainFrame.prePopup()
+		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(gui.mainFrame)
+		res = gui.message.displayDialogAsModal(dialog)
+		dialog.Destroy()
+		gui.mainFrame.postPopup()
+		if res == wx.ID_CANCEL:
+			return
+		# retrieve data from dialog
+		eng = dialog.wordEdit.GetValue().strip()
+		oldKana = EnglishToKanaConverter().process(eng)
+		newKana = dialog.pronunciationEdit.GetValue().strip()
+		comment = dialog.commentEdit.GetValue().strip()
+		# validation
+		z = zip(
+			(_("Word"), _("Pronunciation")),
+			(eng, newKana),
+		)
+		for label, field in z:
+			if not field:
+				gui.messageBox(_("%s is not entered.") % label, _("Error"), wx.ICON_ERROR)
+				return
+		# end validation
+		from .constants import addonVersion
+		self._sendMisreadings(eng, oldKana, newKana, comment, addonVersion)
+
+	def _sendMisreadings(self, eng, oldKana, newKana, comment, addonVersion):
+		# issue title/body(in Japanese)
+		title = GH_ISSUE_PREFIX + eng
+		body = f"""#### 単語
+
+{eng}
+
+#### 現在の読み方
+
+{oldKana}
+
+#### 新しい読み方
+
+{newKana}
+
+#### コメント
+
+{comment}
+
+#### アドオンのバージョン
+
+{addonVersion}"""
+		# send data
+		from .ghUtil import GhUtil
+		util = GhUtil(config.conf["ERE_global"]["accessToken"])
+		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body)
+		if not result:
+			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
+			return
+		gui.messageBox(_("Report sent."), _("Success"))
+
+	# define script
+	@script(description=_("Report Misreadings"), gesture="kb:nvda+control+shift+e")
+	def script_reportMisreadings(self, gesture):
+		wx.CallAfter(self.reportMisreadings, None)
+
+	def setAccessToken(self, evt):
+		if gui.message.isModalMessageBoxActive():
+			return
+		token = config.conf["ERE_global"]["accessToken"]
+		# 正常な値が入力されるまで「ダイアログの表示→有効性確認」を続ける
+		while True:
+			gui.mainFrame.prePopup()
+			d = wx.TextEntryDialog(gui.mainFrame, _("GitHub Access Token"), _("Set GitHub Access Token"), token)
+			res = gui.message.displayDialogAsModal(d)
+			d.Destroy()
+			gui.mainFrame.postPopup()
+			if res == wx.ID_CANCEL:
+				# 何もせずにループも関数も抜ける
+				return
+			token = d.GetValue().strip()
+			# 入力内容が空ならば、「設定値を削除した」と見なす
+			if not token:
+				break
+			# 動作確認
+			from .ghUtil import GhUtil
+			util = GhUtil(token)
+			if not util.isActive():
+				# 認証されていない
+				gui.messageBox(_("GitHub Access Token is invalid."), _("Error"), wx.ICON_ERROR)
+				continue
+			break
+		config.conf["ERE_global"]["accessToken"] = token
+
+	def openIssuesList(self, evt):
+		from urllib.parse import quote
+		url = f"https://github.com/{GH_REPO_OWNER}/{GH_REPO_NAME}/issues?q=is%3Aissue+" + quote(GH_ISSUE_PREFIX)
+		os.startfile(url)

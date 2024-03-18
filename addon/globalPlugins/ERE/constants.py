@@ -28,3 +28,7 @@ elif os.path.isfile(os.path.join(addonRootDir, "doc", "en", addonDocFileName)):
 else:
 	docFilePath = None
 
+# for issues
+GH_REPO_OWNER = "actlaboratory"
+GH_REPO_NAME = "ERE"
+GH_ISSUE_PREFIX = "読み方変更リクエスト："
