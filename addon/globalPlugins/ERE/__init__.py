@@ -64,8 +64,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.processText_original = speech.processText
 		c = EnglishToKanaConverter()
 
-		def processText(locale, text, symbolLevel):
-			text = self.processText_original(locale, text, symbolLevel)
+		def processText(locale, text, symbolLevel, **kwargs):
+			text = self.processText_original(locale, text, symbolLevel, **kwargs)
 			if locale.startswith("ja") and self.getStateSetting():
 				text = c.process(text)
 			return text
