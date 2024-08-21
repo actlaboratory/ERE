@@ -34,7 +34,7 @@ jobs:
           python -m pip install -r requirements.txt
 
       - name: download gettext tools
-        run: python tools\download_gettext\download_gettext.py
+        run: python tools\download_gettext.py
 
       - name: Test
         run: |
