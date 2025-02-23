@@ -86,7 +86,17 @@ class build:
 	def build(self, package_path, build_filename):
 		print("Building...")
 		shutil.copyfile("addon\\doc\\ja\\readme.md", "public\\readme.md")
-		shutil.copytree("public", package_path)
+		# publicの中身をpackage_pathにコピー
+		# .gitkeepがコピーされないように、手動で処理
+		if not os.path.isdir(package_path):
+			os.makedirs(package_path)
+		for path in glob.glob("public\\*"):
+			if os.path.basename(path).startswith("."):
+				continue
+			elif os.path.isdir(path):
+				shutil.copytree(path, package_path + os.path.basename(path))
+			else:
+				shutil.copyfile(path, package_path + os.path.basename(path))
 		ret = self.runcmd("scons")
 		print("build finished with status %d" % ret)
 		if ret != 0:
