@@ -145,7 +145,7 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
   Copyright (c) 2022 AccessibleToolsLaboratory
 
 ## 更新履歴
-### 2025/02/23 Version 1.1.3
+### 2025/02/23 Version 1.1.2
 
 1. NVDA 2025.1のアップデートに対応しました。
 1. 読み上げ辞書を更新しました。
