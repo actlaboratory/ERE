@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import wx
+from .. import compatibilityUtil
 
 # 翻訳が当たるようにする
 try:
@@ -67,7 +68,7 @@ class ReportMisreadingsDialog(wx.Dialog):
 		for label, field in z:
 			if not field:
 				import gui
-				gui.messageBox(_("%s is not entered.") % label, _("Error"), wx.ICON_ERROR, self)
+				compatibilityUtil.messageBox(_("%s is not entered.") % label, _("Error"), self)
 				return
 		# end validation
 		event.Skip()

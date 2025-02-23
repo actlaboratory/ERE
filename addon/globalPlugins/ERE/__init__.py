@@ -14,6 +14,7 @@ from copy import deepcopy
 from logHandler import log
 from .constants import *
 from . import updater
+from . import compatibilityUtil
 from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
 from scriptHandler import script
 
@@ -48,7 +49,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def _checkAutoLanguageSwitchingState(self):
 		if self.getStateSetting() and config.conf["speech"]["autoLanguageSwitching"]:
-			gui.messageBox(_("Automatic Language switching is enabled. English Reading Enhancer may not work correctly. To use this add-on, we recommend to disable this functionality."), _("Warning"))
+			compatibilityUtil.messageBox(_("Automatic Language switching is enabled. English Reading Enhancer may not work correctly. To use this add-on, we recommend to disable this functionality."), _("Warning"))
 
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
@@ -121,7 +122,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.setUpdateCheckSetting(changed)
 		msg = _("Updates will be checked automatically when launching NVDA.") if changed is True else _("Updates will not be checked when launching NVDA.")
 		self.updateCheckToggleItem.SetItemLabel(self.updateCheckToggleString())
-		gui.messageBox(msg, _("Settings changed"))
+		compatibilityUtil.messageBox(msg, _("Settings changed"))
 
 	def performUpdateCheck(self, evt):
 		updater.AutoUpdateChecker().autoUpdateCheck(mode=updater.MANUAL)
@@ -137,7 +138,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.setStateSetting(changed)
 		msg = _("English Reading Enhancer has been enabled.") if changed is True else _("English Reading Enhancer has been disabled.")
 		self.stateToggleItem.SetItemLabel(self.stateToggleString())
-		gui.messageBox(msg, _("Settings changed"))
+		compatibilityUtil.messageBox(msg, _("Settings changed"))
 		if changed:
 			t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
 			t.start()
@@ -161,7 +162,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if gui.message.isModalMessageBoxActive():
 			return
 		if not config.conf["ERE_global"]["accessToken"]:
-			gui.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
+			compatibilityUtil.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
 			return
 		from .dialogs import reportMisreadingsDialog
 		gui.mainFrame.prePopup()
@@ -183,7 +184,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 		for label, field in z:
 			if not field:
-				gui.messageBox(_("%s is not entered.") % label, _("Error"), wx.ICON_ERROR)
+				compatibilityUtil.messageBox(_("%s is not entered.") % label, _("Error"))
 				return
 		# end validation
 		from .constants import addonVersion
@@ -216,9 +217,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		util = GhUtil(config.conf["ERE_global"]["accessToken"])
 		result = util.createIssue(GH_REPO_OWNER, GH_REPO_NAME, title, body)
 		if not result:
-			gui.messageBox(_("Failed to send a report."), _("Error"), wx.ICON_ERROR)
+			compatibilityUtil.messageBox(_("Failed to send a report."), _("Error"))
 			return
-		gui.messageBox(_("Report sent."), _("Success"))
+		compatibilityUtil.messageBox(_("Report sent."), _("Success"))
 
 	# define script
 	@script(description=_("Report Misreadings"), gesture="kb:nvda+control+shift+e")
@@ -248,7 +249,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			util = GhUtil(token)
 			if not util.isActive():
 				# 認証されていない
-				gui.messageBox(_("GitHub Access Token is invalid."), _("Error"), wx.ICON_ERROR)
+				compatibilityUtil.messageBox(_("GitHub Access Token is invalid."), _("Error"))
 				continue
 			break
 		config.conf["ERE_global"]["accessToken"] = token
