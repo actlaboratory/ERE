@@ -145,6 +145,11 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
   Copyright (c) 2022 AccessibleToolsLaboratory
 
 ## 更新履歴
+### 2026/XX/XX Version 1.1.3
+
+1. 「haven't」など、記号を途中に含む単語が正しく発音されない問題を修正しました。
+1. 読み上げ辞書を更新しました。
+
 ### 2025/02/23 Version 1.1.2
 
 1. NVDA 2025.1のアップデートに対応しました。
