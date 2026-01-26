@@ -6,16 +6,14 @@ import gui
 import globalPluginHandler
 import globalVars
 import threading
-import time
 import wx
-import speech
-import speechDictHandler
-from copy import deepcopy
 from logHandler import log
 from .constants import *
 from . import updater
 from . import compatibilityUtil
-from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
+from . import extensionPoints
+from . import speechHook
+from .textProcessors import getEnglishToKanaProcessor
 from scriptHandler import script
 
 try:
@@ -42,10 +40,21 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.autoUpdateChecker = updater.AutoUpdateChecker()
 			self.autoUpdateChecker.autoUpdateCheck()
 		self._setupMenu()
+		self._initializeExtensionPoints()
 		if self.getStateSetting():
 			self._setup()
 		t = threading.Thread(target=self._checkAutoLanguageSwitchingState, daemon=True)
 		t.start()
+
+	def _initializeExtensionPoints(self):
+		"""Initialize extension points and register handlers."""
+		# Register default dictionary pattern removals
+		speechHook.registerDefaultPatternRemovals()
+
+		# Register the English to Kana processor with the pre-process extension point
+		# This ensures text is converted before NVDA's standard processing
+		self._textProcessor = getEnglishToKanaProcessor()
+		extensionPoints.textProcessing.preProcessText.register(self._textProcessor)
 
 	def _checkAutoLanguageSwitchingState(self):
 		if self.getStateSetting() and config.conf["speech"]["autoLanguageSwitching"]:
@@ -53,49 +62,42 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
+		self._fullUnsetup()
+		# Unregister extension point handlers
+		extensionPoints.textProcessing.preProcessText.unregister(self._textProcessor)
 		try:
 			gui.mainFrame.sysTrayIcon.menu.Remove(self.rootMenuItem)
 		except BaseException:
 			pass
 
 	def _setup(self):
-		if hasattr(speech, "speech"):
-			self.processText_original = speech.speech.processText
-		else:
-			self.processText_original = speech.processText
-		c = EnglishToKanaConverter()
+		"""Enable text processing using extension points."""
+		manager = speechHook.getManager()
 
-		def processText(locale, text, symbolLevel, **kwargs):
-			# 2026/01/11 本家のprocessTextよりも前にカナ変換をするように変更
-			# 従来の実装ではアポストロフィーなどの記号が読みに変換されたあとで処理されるため、「haven't」などが正しく読めなかった
-			if locale.startswith("ja") and self.getStateSetting():
-				text = c.process(text)
-			text = self.processText_original(locale, text, symbolLevel, **kwargs)
-			return text
-		if hasattr(speech, "speech"):
-			speech.speech.processText = processText
-		else:
-			speech.processText = processText
-		# modify builtin speech dicts
-		unusedEntries = []
-		unusedPatterns = (
-			"([a-z])([A-Z])",
-			"([A-Z])([A-Z][a-z])",
-		)
-		for entry in speechDictHandler.dictionaries["builtin"]:
-			if entry.pattern in unusedPatterns:
-				unusedEntries.append(entry)
-		self.builtinDict_original = deepcopy(speechDictHandler.dictionaries["builtin"])
-		for entry in unusedEntries:
-			index = speechDictHandler.dictionaries["builtin"].index(entry)
-			del speechDictHandler.dictionaries["builtin"][index]
+		# Install the speech hook if not already installed
+		if not manager.isInstalled:
+			manager.install()
+			manager.applyDictionaryModifications()
+
+		# Enable text processing
+		manager.setEnabled(True)
 
 	def _unsetup(self):
-		if hasattr(speech, "speech"):
-			speech.speech.processText = self.processText_original
-		else:
-			speech.processText = self.processText_original
-		speechDictHandler.dictionaries["builtin"] = self.builtinDict_original
+		"""Disable text processing and restore original state."""
+		manager = speechHook.getManager()
+
+		# Disable text processing
+		manager.setEnabled(False)
+
+		# Only uninstall and restore if we're completely shutting down
+		# (this is handled in terminate)
+
+	def _fullUnsetup(self):
+		"""Fully uninstall the speech hook (used during terminate)."""
+		manager = speechHook.getManager()
+		manager.setEnabled(False)
+		manager.restoreDictionaryModifications()
+		manager.uninstall()
 
 	def _setupMenu(self):
 		self.rootMenu = wx.Menu()
@@ -167,6 +169,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			compatibilityUtil.messageBox(_("Before using this feature, please set your GitHub Access Token."), _("Error"))
 			return
 		from .dialogs import reportMisreadingsDialog
+		from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
 		gui.mainFrame.prePopup()
 		dialog = reportMisreadingsDialog.ReportMisreadingsDialog(gui.mainFrame)
 		res = gui.message.displayDialogAsModal(dialog)
