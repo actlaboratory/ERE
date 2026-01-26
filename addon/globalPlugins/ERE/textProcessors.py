@@ -1,9 +1,9 @@
 # coding: UTF-8
 """
-Text Processors Module for English Reading Enhancer
+English Reading Enhancer用のテキストプロセッサモジュール
 
-This module defines text processor classes that can be registered
-with the extension point system for text processing.
+このモジュールは、拡張ポイントシステムに登録できる
+テキストプロセッサクラスを定義します。
 """
 
 from __future__ import unicode_literals
@@ -14,46 +14,46 @@ from logHandler import log
 
 class TextProcessor(ABC):
 	"""
-	Abstract base class for text processors.
+	テキストプロセッサの抽象基底クラス。
 
-	Text processors transform text before it is passed to the speech
-	synthesizer. Each processor should implement the process method
-	and can optionally filter by locale.
+	テキストプロセッサは、音声合成器に渡される前にテキストを変換する。
+	各プロセッサはprocessメソッドを実装し、
+	オプションでロケールによるフィルタリングができる。
 	"""
 
 	def __init__(self, localePrefix: Optional[str] = None):
 		"""
-		Initialize the text processor.
+		テキストプロセッサを初期化する。
 
-		Args:
-			localePrefix: If set, only process text for locales starting with this prefix
+		引数:
+			localePrefix: 設定された場合、このプレフィックスで始まるロケールのテキストのみ処理する
 		"""
 		self._localePrefix = localePrefix
 
 	@abstractmethod
 	def process(self, text: str) -> str:
 		"""
-		Process the given text.
+		指定されたテキストを処理する。
 
-		Args:
-			text: The input text to process
+		引数:
+			text: 処理する入力テキスト
 
-		Returns:
-			The processed text
+		戻り値:
+			処理されたテキスト
 		"""
 		pass
 
 	def __call__(self, text: str, locale: str = "", **kwargs) -> str:
 		"""
-		Make the processor callable for use as an extension point handler.
+		プロセッサを拡張ポイントハンドラとして呼び出し可能にする。
 
-		Args:
-			text: The input text to process
-			locale: The locale of the text
-			**kwargs: Additional arguments (ignored)
+		引数:
+			text: 処理する入力テキスト
+			locale: テキストのロケール
+			**kwargs: 追加の引数（無視される）
 
-		Returns:
-			The processed text, or original text if locale doesn't match
+		戻り値:
+			処理されたテキスト、またはロケールが一致しない場合は元のテキスト
 		"""
 		if self._localePrefix and not locale.startswith(self._localePrefix):
 			return text
@@ -62,10 +62,10 @@ class TextProcessor(ABC):
 
 class EnglishToKanaProcessor(TextProcessor):
 	"""
-	Text processor that converts English text to Kana for Japanese speech synthesizers.
+	日本語音声合成器用に英語テキストをカナに変換するテキストプロセッサ。
 
-	This processor wraps the EnglishToKanaConverter and registers it with
-	the extension point system.
+	このプロセッサはEnglishToKanaConverterをラップし、
+	拡張ポイントシステムに登録する。
 	"""
 
 	def __init__(self):
@@ -73,7 +73,7 @@ class EnglishToKanaProcessor(TextProcessor):
 		self._converter = None
 
 	def _getConverter(self):
-		"""Lazy initialization of the converter."""
+		"""コンバータの遅延初期化。"""
 		if self._converter is None:
 			from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
 			self._converter = EnglishToKanaConverter()
@@ -81,13 +81,13 @@ class EnglishToKanaProcessor(TextProcessor):
 
 	def process(self, text: str) -> str:
 		"""
-		Convert English words in the text to Kana.
+		テキスト内の英単語をカナに変換する。
 
-		Args:
-			text: The input text potentially containing English words
+		引数:
+			text: 英単語を含む可能性のある入力テキスト
 
-		Returns:
-			Text with English words converted to Kana
+		戻り値:
+			英単語がカナに変換されたテキスト
 		"""
 		try:
 			return self._getConverter().process(text)
@@ -96,12 +96,12 @@ class EnglishToKanaProcessor(TextProcessor):
 			return text
 
 
-# Singleton instance for the English to Kana processor
+# EnglishToKanaプロセッサのシングルトンインスタンス
 _englishToKanaProcessor: Optional[EnglishToKanaProcessor] = None
 
 
 def getEnglishToKanaProcessor() -> EnglishToKanaProcessor:
-	"""Get the singleton EnglishToKanaProcessor instance."""
+	"""シングルトンのEnglishToKanaProcessorインスタンスを取得する。"""
 	global _englishToKanaProcessor
 	if _englishToKanaProcessor is None:
 		_englishToKanaProcessor = EnglishToKanaProcessor()

@@ -1,14 +1,14 @@
 # coding: UTF-8
 """
-Extension Points Module for English Reading Enhancer
+English Reading Enhancer用の拡張ポイントモジュール
 
-This module provides extension point infrastructure for text processing,
-allowing handlers to be registered and called in a clean, decoupled manner
-instead of using function overrides/monkey-patching.
+このモジュールは、関数オーバーライド/モンキーパッチの代わりに、
+ハンドラを登録して呼び出すためのクリーンで疎結合な
+テキスト処理用の拡張ポイント基盤を提供します。
 
-Extension point types:
-- Filter: Allows handlers to modify data passing through
-- Action: Notifies handlers when something happens (no return value)
+拡張ポイントの種類:
+- Filter: ハンドラがデータを変更できるようにする
+- Action: 何かが起きた時にハンドラに通知する（戻り値なし）
 """
 
 from __future__ import unicode_literals
@@ -17,41 +17,41 @@ from logHandler import log
 
 
 class HandlerRegistrar:
-	"""Base class for managing handler registration."""
+	"""ハンドラ登録を管理する基底クラス。"""
 
 	def __init__(self):
 		self._handlers: List[Callable] = []
 
 	def register(self, handler: Callable) -> None:
-		"""Register a handler function."""
+		"""ハンドラ関数を登録する。"""
 		if handler not in self._handlers:
 			self._handlers.append(handler)
 			log.debug(f"Handler registered: {handler.__name__ if hasattr(handler, '__name__') else handler}")
 
 	def unregister(self, handler: Callable) -> None:
-		"""Unregister a handler function."""
+		"""ハンドラ関数の登録を解除する。"""
 		if handler in self._handlers:
 			self._handlers.remove(handler)
 			log.debug(f"Handler unregistered: {handler.__name__ if hasattr(handler, '__name__') else handler}")
 
 	def isRegistered(self, handler: Callable) -> bool:
-		"""Check if a handler is registered."""
+		"""ハンドラが登録されているか確認する。"""
 		return handler in self._handlers
 
 	@property
 	def handlers(self) -> List[Callable]:
-		"""Get list of registered handlers (copy)."""
+		"""登録されているハンドラのリスト（コピー）を取得する。"""
 		return self._handlers.copy()
 
 
 class Filter(HandlerRegistrar):
 	"""
-	Extension point that allows handlers to filter/modify data.
+	ハンドラがデータをフィルタ/変更できる拡張ポイント。
 
-	Handlers are called in registration order, each receiving the output
-	of the previous handler. This creates a processing pipeline.
+	ハンドラは登録順に呼び出され、それぞれが前のハンドラの出力を受け取る。
+	これにより処理パイプラインが作成される。
 
-	Usage:
+	使用例:
 		textFilter = Filter()
 		textFilter.register(my_handler)
 		result = textFilter.apply(initial_value, locale="ja")
@@ -59,14 +59,14 @@ class Filter(HandlerRegistrar):
 
 	def apply(self, value: Any, **kwargs) -> Any:
 		"""
-		Apply all registered handlers to the value.
+		登録されているすべてのハンドラを値に適用する。
 
-		Args:
-			value: The initial value to be filtered
-			**kwargs: Additional keyword arguments passed to all handlers
+		引数:
+			value: フィルタリングする初期値
+			**kwargs: すべてのハンドラに渡される追加のキーワード引数
 
-		Returns:
-			The filtered value after all handlers have processed it
+		戻り値:
+			すべてのハンドラが処理した後のフィルタリングされた値
 		"""
 		for handler in self._handlers:
 			try:
@@ -78,12 +78,12 @@ class Filter(HandlerRegistrar):
 
 class Action(HandlerRegistrar):
 	"""
-	Extension point that notifies handlers when an event occurs.
+	イベント発生時にハンドラに通知する拡張ポイント。
 
-	Unlike Filter, handlers don't return values - they just receive
-	notification that something happened.
+	Filterとは異なり、ハンドラは値を返さない。
+	何かが起きたという通知を受け取るだけ。
 
-	Usage:
+	使用例:
 		onEnabled = Action()
 		onEnabled.register(my_handler)
 		onEnabled.notify(some_data="value")
@@ -91,10 +91,10 @@ class Action(HandlerRegistrar):
 
 	def notify(self, **kwargs) -> None:
 		"""
-		Notify all registered handlers.
+		登録されているすべてのハンドラに通知する。
 
-		Args:
-			**kwargs: Keyword arguments passed to all handlers
+		引数:
+			**kwargs: すべてのハンドラに渡されるキーワード引数
 		"""
 		for handler in self._handlers:
 			try:
@@ -105,32 +105,31 @@ class Action(HandlerRegistrar):
 
 class TextProcessingExtensionPoint:
 	"""
-	Extension point for text processing before speech synthesis.
+	音声合成前のテキスト処理用の拡張ポイント。
 
-	This replaces the previous monkey-patching approach with a clean
-	extension point that allows text processors to be registered
-	and applied in sequence.
+	以前のモンキーパッチ方式を、テキストプロセッサを登録して
+	順番に適用できるクリーンな拡張ポイントに置き換える。
 	"""
 
-	# Filter applied before NVDA's processText
+	# NVDAのprocessTextの前に適用されるフィルタ
 	preProcessText = Filter()
 
-	# Filter applied after NVDA's processText
+	# NVDAのprocessTextの後に適用されるフィルタ
 	postProcessText = Filter()
 
-	# Action triggered when processing is enabled
+	# 処理が有効になった時にトリガーされるアクション
 	onEnabled = Action()
 
-	# Action triggered when processing is disabled
+	# 処理が無効になった時にトリガーされるアクション
 	onDisabled = Action()
 
 
 class SpeechDictModifier:
 	"""
-	Extension point for modifying speech dictionaries.
+	音声辞書を変更するための拡張ポイント。
 
-	Provides a clean interface for registering dictionary modifications
-	that can be applied/reverted without direct manipulation.
+	直接操作せずに適用/元に戻すことができる
+	辞書変更を登録するためのクリーンなインターフェースを提供する。
 	"""
 
 	def __init__(self):
@@ -138,32 +137,32 @@ class SpeechDictModifier:
 		self._originalState: Optional[Any] = None
 
 	def registerPatternRemoval(self, pattern: str) -> None:
-		"""Register a pattern to be removed from builtin dictionary."""
+		"""組み込み辞書から削除するパターンを登録する。"""
 		self._modifications.append({
 			'type': 'remove_pattern',
 			'pattern': pattern
 		})
 
 	def getModifications(self) -> List[dict]:
-		"""Get list of registered modifications."""
+		"""登録されている変更のリストを取得する。"""
 		return self._modifications.copy()
 
 	def setOriginalState(self, state: Any) -> None:
-		"""Store the original dictionary state for restoration."""
+		"""復元用に元の辞書状態を保存する。"""
 		self._originalState = state
 
 	def getOriginalState(self) -> Optional[Any]:
-		"""Get the stored original state."""
+		"""保存されている元の状態を取得する。"""
 		return self._originalState
 
 
-# Global extension point instances
+# グローバル拡張ポイントインスタンス
 textProcessing = TextProcessingExtensionPoint()
 speechDictModifier = SpeechDictModifier()
 
 
 def resetAll() -> None:
-	"""Reset all extension points (useful for testing or cleanup)."""
+	"""すべての拡張ポイントをリセットする（テストやクリーンアップに便利）。"""
 	textProcessing.preProcessText._handlers.clear()
 	textProcessing.postProcessText._handlers.clear()
 	textProcessing.onEnabled._handlers.clear()

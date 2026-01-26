@@ -1,12 +1,12 @@
 # coding: UTF-8
 """
-Speech Hook Module for English Reading Enhancer
+English Reading Enhancer用の音声フックモジュール
 
-This module manages the integration between NVDA's speech system and
-the extension point-based text processing pipeline.
+このモジュールは、NVDAの音声システムと
+拡張ポイントベースのテキスト処理パイプライン間の統合を管理する。
 
-Instead of directly monkey-patching speech.processText, this module
-provides a clean interface that uses the extension point system.
+speech.processTextを直接モンキーパッチする代わりに、
+このモジュールは拡張ポイントシステムを使用するクリーンなインターフェースを提供する。
 """
 
 from __future__ import unicode_literals
@@ -20,12 +20,12 @@ from . import extensionPoints
 
 class SpeechHookManager:
 	"""
-	Manages the speech hook lifecycle.
+	音声フックのライフサイクルを管理する。
 
-	This class handles:
-	- Installing/uninstalling the speech processText hook
-	- Managing speech dictionary modifications
-	- Coordinating with the extension point system
+	このクラスは以下を処理する:
+	- speech processTextフックのインストール/アンインストール
+	- 音声辞書の変更の管理
+	- 拡張ポイントシステムとの連携
 	"""
 
 	def __init__(self):
@@ -36,16 +36,16 @@ class SpeechHookManager:
 
 	@property
 	def isInstalled(self) -> bool:
-		"""Check if the speech hook is currently installed."""
+		"""音声フックが現在インストールされているか確認する。"""
 		return self._isInstalled
 
 	@property
 	def isEnabled(self) -> bool:
-		"""Check if text processing is enabled."""
+		"""テキスト処理が有効か確認する。"""
 		return self._enabled
 
 	def setEnabled(self, enabled: bool) -> None:
-		"""Enable or disable text processing (without uninstalling hook)."""
+		"""テキスト処理を有効/無効にする（フックのアンインストールなし）。"""
 		self._enabled = enabled
 		if enabled:
 			extensionPoints.textProcessing.onEnabled.notify()
@@ -54,33 +54,33 @@ class SpeechHookManager:
 
 	def install(self) -> None:
 		"""
-		Install the speech hook.
+		音声フックをインストールする。
 
-		This replaces NVDA's processText with our wrapper that uses
-		the extension point system.
+		NVDAのprocessTextを拡張ポイントシステムを使用する
+		ラッパーに置き換える。
 		"""
 		if self._isInstalled:
 			log.debug("SpeechHookManager: Hook already installed")
 			return
 
-		# Store original processText
+		# 元のprocessTextを保存
 		if hasattr(speech, "speech"):
 			self._originalProcessText = speech.speech.processText
 		else:
 			self._originalProcessText = speech.processText
 
-		# Create wrapper function
+		# ラッパー関数を作成
 		def processText(locale: str, text: str, symbolLevel, **kwargs) -> str:
-			# Apply pre-processing filters only if enabled
+			# 有効な場合のみ前処理フィルタを適用
 			if self._enabled:
 				text = extensionPoints.textProcessing.preProcessText.apply(
 					text, locale=locale, symbolLevel=symbolLevel
 				)
 
-			# Call original NVDA processText
+			# 元のNVDA processTextを呼び出す
 			text = self._originalProcessText(locale, text, symbolLevel, **kwargs)
 
-			# Apply post-processing filters only if enabled
+			# 有効な場合のみ後処理フィルタを適用
 			if self._enabled:
 				text = extensionPoints.textProcessing.postProcessText.apply(
 					text, locale=locale, symbolLevel=symbolLevel
@@ -88,7 +88,7 @@ class SpeechHookManager:
 
 			return text
 
-		# Install the wrapper
+		# ラッパーをインストール
 		if hasattr(speech, "speech"):
 			speech.speech.processText = processText
 		else:
@@ -99,9 +99,9 @@ class SpeechHookManager:
 
 	def uninstall(self) -> None:
 		"""
-		Uninstall the speech hook.
+		音声フックをアンインストールする。
 
-		This restores NVDA's original processText function.
+		NVDAの元のprocessText関数を復元する。
 		"""
 		if not self._isInstalled:
 			log.debug("SpeechHookManager: Hook not installed")
@@ -119,17 +119,17 @@ class SpeechHookManager:
 
 	def applyDictionaryModifications(self) -> None:
 		"""
-		Apply speech dictionary modifications based on registered patterns.
+		登録されたパターンに基づいて音声辞書の変更を適用する。
 		"""
 		modifications = extensionPoints.speechDictModifier.getModifications()
 		if not modifications:
 			return
 
-		# Store original state
+		# 元の状態を保存
 		self._originalBuiltinDict = deepcopy(speechDictHandler.dictionaries["builtin"])
 		extensionPoints.speechDictModifier.setOriginalState(self._originalBuiltinDict)
 
-		# Apply modifications
+		# 変更を適用
 		entriesToRemove: List[Any] = []
 		for mod in modifications:
 			if mod['type'] == 'remove_pattern':
@@ -147,7 +147,7 @@ class SpeechHookManager:
 
 	def restoreDictionaryModifications(self) -> None:
 		"""
-		Restore the original speech dictionary state.
+		元の音声辞書の状態を復元する。
 		"""
 		originalState = extensionPoints.speechDictModifier.getOriginalState()
 		if originalState is not None:
@@ -156,12 +156,12 @@ class SpeechHookManager:
 			log.debug("SpeechHookManager: Dictionary restored")
 
 
-# Global singleton instance
+# グローバルシングルトンインスタンス
 _manager: Optional[SpeechHookManager] = None
 
 
 def getManager() -> SpeechHookManager:
-	"""Get the global SpeechHookManager instance."""
+	"""グローバルなSpeechHookManagerインスタンスを取得する。"""
 	global _manager
 	if _manager is None:
 		_manager = SpeechHookManager()
@@ -169,8 +169,8 @@ def getManager() -> SpeechHookManager:
 
 
 def registerDefaultPatternRemovals() -> None:
-	"""Register the default patterns to be removed from the builtin dictionary."""
-	# These patterns are removed because they interfere with English text processing
-	# on Japanese synthesizers (e.g., camelCase word splitting)
+	"""組み込み辞書から削除するデフォルトのパターンを登録する。"""
+	# これらのパターンは、日本語合成器での英語テキスト処理を妨げるため削除される
+	# （例：キャメルケースの単語分割）
 	extensionPoints.speechDictModifier.registerPatternRemoval("([a-z])([A-Z])")
 	extensionPoints.speechDictModifier.registerPatternRemoval("([A-Z])([A-Z][a-z])")

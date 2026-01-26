@@ -47,12 +47,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		t.start()
 
 	def _initializeExtensionPoints(self):
-		"""Initialize extension points and register handlers."""
-		# Register default dictionary pattern removals
+		"""拡張ポイントを初期化し、ハンドラを登録する。"""
+		# デフォルトの辞書パターン削除を登録
 		speechHook.registerDefaultPatternRemovals()
 
-		# Register the English to Kana processor with the pre-process extension point
-		# This ensures text is converted before NVDA's standard processing
+		# EnglishToKanaプロセッサを前処理拡張ポイントに登録
+		# これによりNVDAの標準処理の前にテキストが変換される
 		self._textProcessor = getEnglishToKanaProcessor()
 		extensionPoints.textProcessing.preProcessText.register(self._textProcessor)
 
@@ -63,7 +63,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
 		self._fullUnsetup()
-		# Unregister extension point handlers
+		# 拡張ポイントハンドラの登録を解除
 		extensionPoints.textProcessing.preProcessText.unregister(self._textProcessor)
 		try:
 			gui.mainFrame.sysTrayIcon.menu.Remove(self.rootMenuItem)
@@ -71,29 +71,29 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			pass
 
 	def _setup(self):
-		"""Enable text processing using extension points."""
+		"""拡張ポイントを使用してテキスト処理を有効にする。"""
 		manager = speechHook.getManager()
 
-		# Install the speech hook if not already installed
+		# まだインストールされていない場合は音声フックをインストール
 		if not manager.isInstalled:
 			manager.install()
 			manager.applyDictionaryModifications()
 
-		# Enable text processing
+		# テキスト処理を有効にする
 		manager.setEnabled(True)
 
 	def _unsetup(self):
-		"""Disable text processing and restore original state."""
+		"""テキスト処理を無効にし、元の状態を復元する。"""
 		manager = speechHook.getManager()
 
-		# Disable text processing
+		# テキスト処理を無効にする
 		manager.setEnabled(False)
 
-		# Only uninstall and restore if we're completely shutting down
-		# (this is handled in terminate)
+		# 完全にシャットダウンする場合のみアンインストールと復元を行う
+		# （これはterminateで処理される）
 
 	def _fullUnsetup(self):
-		"""Fully uninstall the speech hook (used during terminate)."""
+		"""音声フックを完全にアンインストールする（terminate時に使用）。"""
 		manager = speechHook.getManager()
 		manager.setEnabled(False)
 		manager.restoreDictionaryModifications()
