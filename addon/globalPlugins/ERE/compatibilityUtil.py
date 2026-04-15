@@ -1,9 +1,12 @@
 import gui
 import wx
-import versionInfo
-
+try:                                                                                                                   
+    import buildVersion as _versionInfo                                                                                
+except ImportError:                                                                                                    
+    import versionInfo as _versionInfo                                                                                 
+ 
 def isCompatibleWith2025():
-    return versionInfo.version_year >= 2025
+    return _versionInfo.version_year >= 2025
 
 def messageBox(message: str, title: str, parent: wx.Window | None=None):
     if isCompatibleWith2025():

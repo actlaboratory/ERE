@@ -66,9 +66,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		c = EnglishToKanaConverter()
 
 		def processText(locale, text, symbolLevel, **kwargs):
-			text = self.processText_original(locale, text, symbolLevel, **kwargs)
+			# 2026/01/11 本家のprocessTextよりも前にカナ変換をするように変更
+			# 従来の実装ではアポストロフィーなどの記号が読みに変換されたあとで処理されるため、「haven't」などが正しく読めなかった
 			if locale.startswith("ja") and self.getStateSetting():
 				text = c.process(text)
+			text = self.processText_original(locale, text, symbolLevel, **kwargs)
 			return text
 		if hasattr(speech, "speech"):
 			speech.speech.processText = processText
