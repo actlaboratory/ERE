@@ -147,6 +147,7 @@ Copyright (C) 2022 Kazto Kitabatake, ACT Laboratory All rights reserved.
 ## 更新履歴
 ### 2026/XX/XX Version 1.1.3
 
+1. NVDA 2026.1のアップデートに対応しました。
 1. 「haven't」など、記号を途中に含む単語が正しく発音されない問題を修正しました。
 1. 読み上げ辞書を更新しました。
 
