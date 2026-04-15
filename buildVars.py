@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
-ADDON_VERSION = "1.1.2"
-ADDON_RELEASE_DATE = "2025-02-23"
+ADDON_VERSION = "1.1.3"
+ADDON_RELEASE_DATE = "2026-04-15"
 ADDON_NAME = "EnglishReadingEnhancer"
 ADDON_KEYWORD = "ERE"
 
