@@ -15,7 +15,7 @@ from logHandler import log
 from .constants import *
 from . import updater
 from . import compatibilityUtil
-from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter
+from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter, ConversionMode
 from scriptHandler import script
 
 try:
@@ -28,7 +28,8 @@ except:
 confspec = {
 	"checkForUpdatesOnStartup": "boolean(default=True)",
 	"enable": "boolean(default=True)",
-	"accessToken": 'string(default="")'
+	"accessToken": 'string(default="")',
+	"forceSpellOut": "boolean(default=False)"
 }
 config.conf.spec["ERE_global"] = confspec
 
@@ -69,7 +70,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			# 2026/01/11 本家のprocessTextよりも前にカナ変換をするように変更
 			# 従来の実装ではアポストロフィーなどの記号が読みに変換されたあとで処理されるため、「haven't」などが正しく読めなかった
 			if locale.startswith("ja") and self.getStateSetting():
-				text = c.process(text)
+				mode = ConversionMode.SPELL_ALL if self.getForceSpellOutSetting() else ConversionMode.STANDARD
+				text = c.process(text, mode=mode)
 			text = self.processText_original(locale, text, symbolLevel, **kwargs)
 			return text
 		if hasattr(speech, "speech"):
@@ -101,6 +103,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.rootMenu = wx.Menu()
 		self.stateToggleItem = self.rootMenu.Append(wx.ID_ANY, self.stateToggleString(), _("Toggles use of English Reading Enhancer."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleState, self.stateToggleItem)
+		self.forceSpellOutToggleItem = self.rootMenu.Append(wx.ID_ANY, self.forceSpellOutToggleString(), _("Toggles whether all English words are spelled out letter by letter."))
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleForceSpellOut, self.forceSpellOutToggleItem)
 		self.updateCheckToggleItem = self.rootMenu.Append(wx.ID_ANY, self.updateCheckToggleString(), _("Toggles update checking on startup."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleUpdateCheck, self.updateCheckToggleItem)
 		self.updateCheckPerformItem = self.rootMenu.Append(wx.ID_ANY, _("Check for updates"), _("Checks for new updates manually."))
@@ -157,6 +161,22 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def stateToggleString(self):
 		return _("Disable English Reading Enhancer") if self.getStateSetting() is True else _("Enable English Reading Enhancer")
+
+	def toggleForceSpellOut(self, evt):
+		changed = not self.getForceSpellOutSetting()
+		self.setForceSpellOutSetting(changed)
+		msg = _("All English words will be spelled out letter by letter.") if changed is True else _("English words will be converted to Japanese pronunciation normally.")
+		self.forceSpellOutToggleItem.SetItemLabel(self.forceSpellOutToggleString())
+		compatibilityUtil.messageBox(msg, _("Settings changed"))
+
+	def getForceSpellOutSetting(self):
+		return config.conf["ERE_global"]["forceSpellOut"]
+
+	def setForceSpellOutSetting(self, val):
+		config.conf["ERE_global"]["forceSpellOut"] = val
+
+	def forceSpellOutToggleString(self):
+		return _("Disable Forced Spell-out Mode") if self.getForceSpellOutSetting() is True else _("Enable Forced Spell-out Mode")
 
 	# github issues
 	def reportMisreadings(self, evt):
