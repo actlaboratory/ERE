@@ -15,6 +15,7 @@ from logHandler import log
 from .constants import *
 from . import updater
 from . import compatibilityUtil
+from . import dictionarySwitcher
 from ._englishToKanaConverter.englishToKanaConverter import EnglishToKanaConverter, ConversionMode
 from scriptHandler import script
 
@@ -29,7 +30,8 @@ confspec = {
 	"checkForUpdatesOnStartup": "boolean(default=True)",
 	"enable": "boolean(default=True)",
 	"accessToken": 'string(default="")',
-	"forceSpellOut": "boolean(default=False)"
+	"forceSpellOut": "boolean(default=False)",
+	"useDevDictionary": "boolean(default=False)"
 }
 config.conf.spec["ERE_global"] = confspec
 
@@ -42,6 +44,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.getUpdateCheckSetting() is True:
 			self.autoUpdateChecker = updater.AutoUpdateChecker()
 			self.autoUpdateChecker.autoUpdateCheck()
+		self._restoreDictionarySetting()
 		self._setupMenu()
 		if self.getStateSetting():
 			self._setup()
@@ -109,6 +112,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleUpdateCheck, self.updateCheckToggleItem)
 		self.updateCheckPerformItem = self.rootMenu.Append(wx.ID_ANY, _("Check for updates"), _("Checks for new updates manually."))
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.performUpdateCheck, self.updateCheckPerformItem)
+		# 開発中の辞書が同梱されているビルドでのみ、切り替え項目を出す
+		if dictionarySwitcher.isAvailable():
+			self.devDictionaryToggleItem = self.rootMenu.Append(wx.ID_ANY, self.devDictionaryToggleString(), _("Switches between the bundled dictionary and the one under development."))
+			gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.toggleDevDictionary, self.devDictionaryToggleItem)
 		# github issues
 		self.ghMenu = wx.Menu()
 		self.reportMisreadingsItem = self.ghMenu.Append(wx.ID_ANY, _("Report Misreadings") + "...", _("Report words that cannot be read correctly in English Reading Enhancer."))
@@ -168,6 +175,48 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		msg = _("All English words will be spelled out letter by letter.") if changed is True else _("English words will be converted to Japanese pronunciation normally.")
 		self.forceSpellOutToggleItem.SetItemLabel(self.forceSpellOutToggleString())
 		compatibilityUtil.messageBox(msg, _("Settings changed"))
+
+	def _restoreDictionarySetting(self):
+		"""前回選ばれていた辞書を、変換が始まる前に適用しておく。"""
+		if not self.getDevDictionarySetting():
+			return
+		if not dictionarySwitcher.isAvailable():
+			# 開発中の辞書を含まないビルドに更新された。設定だけが残っていると、
+			# 後でまた開発中の辞書を含むビルドに戻したときに、意図せず切り替わってしまう。
+			# 切り替え項目も表示されないため利用者が直せない。ここで実態に合わせておく
+			log.info("ERE: 開発中の辞書が無くなっているため、既定の辞書の設定に戻します")
+			self.setDevDictionarySetting(False)
+			return
+		try:
+			dictionarySwitcher.useDev()
+		except Exception:
+			log.exception("ERE: 開発中の辞書を適用できませんでした")
+			self.setDevDictionarySetting(False)
+
+	def toggleDevDictionary(self, evt):
+		changed = not self.getDevDictionarySetting()
+		try:
+			if changed:
+				dictionarySwitcher.useDev()
+			else:
+				dictionarySwitcher.useDefault()
+		except Exception:
+			log.exception("ERE: 辞書を切り替えられませんでした")
+			compatibilityUtil.messageBox(_("Failed to switch the dictionary. See the NVDA log for details."), _("Error"))
+			return
+		self.setDevDictionarySetting(changed)
+		self.devDictionaryToggleItem.SetItemLabel(self.devDictionaryToggleString())
+		msg = _("Switched to the dictionary under development.") if changed else _("Switched back to the bundled dictionary.")
+		compatibilityUtil.messageBox("%s (%s)" % (msg, dictionarySwitcher.describe()), _("Settings changed"))
+
+	def getDevDictionarySetting(self):
+		return config.conf["ERE_global"]["useDevDictionary"]
+
+	def setDevDictionarySetting(self, val):
+		config.conf["ERE_global"]["useDevDictionary"] = val
+
+	def devDictionaryToggleString(self):
+		return _("Switch back to the bundled dictionary") if self.getDevDictionarySetting() is True else _("Switch to the dictionary under development")
 
 	def getForceSpellOutSetting(self):
 		return config.conf["ERE_global"]["forceSpellOut"]
