@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import os
+
 ADDON_VERSION = "1.1.3"
 ADDON_RELEASE_DATE = "2026-04-15"
 ADDON_NAME = "EnglishReadingEnhancer"
@@ -64,6 +66,23 @@ i18nSources = pythonSources + ["buildVars.py"]
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
 excludedFiles = ["globalPlugins/ERE/_englishToKanaConverter/englishToKanaConverter/englishToKanaConverter.log"]
+
+# 開発用の辞書（_devDictionaries）は動作検証のためのものなので、
+# スナップショット版には含めてよいが、正式リリース版には含めない。
+# TAG_NAME はタグからのリリースビルドでのみ設定される
+# （.github/workflows/testAndBuild.yml の「Set tag name if This is an official release」）。
+# スナップショットのビルドでは設定されないため、そちらには従来通り含まれる。
+# 何らかの理由でこのディレクトリがリリース対象のブランチに入り込んでいても、
+# 正式リリースのパッケージからは確実に取り除かれる。
+_DEV_DICTIONARIES = os.path.join("addon", "globalPlugins", "ERE", "_devDictionaries")
+if os.environ.get("TAG_NAME") and os.path.isdir(_DEV_DICTIONARIES):
+	_devDictionaryFiles = sorted(os.listdir(_DEV_DICTIONARIES))
+	for _name in _devDictionaryFiles:
+		excludedFiles.append(os.path.join("globalPlugins", "ERE", "_devDictionaries", _name))
+	print(
+		"buildVars: 正式リリースのビルドのため、開発用の辞書 %d 件をパッケージから除外します: %s"
+		% (len(_devDictionaryFiles), ", ".join(_devDictionaryFiles))
+	)
 
 # Base language for the NVDA add-on
 # If your add-on is written in a language other than english, modify this variable.
